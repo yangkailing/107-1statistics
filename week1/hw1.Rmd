@@ -1,0 +1,209 @@
+---
+title: "homework1"
+author: "b06208016 楊鎧綾"
+date: "September 13, 2018"
+output: html_document
+---
+
+##3.1
+Compute the difference between 2018 and the year
+you started at this university and divide this by
+the difference between 2018 and the year you were
+born. Multiply this with 100 to get the percentage
+of your life you have spent at this university. 
+```{r}
+((2018-2017)/(2018-1999))*100
+```
+
+##3.2
+Repeat the previous ToDo, but with several steps
+in between. You can give the variables any name
+you want, but the name has to start with a letter.
+```{r}
+freshman=2017#the year I started at this university
+born=1999#the year I were born
+percentage=((2018-freshman)/(2018-born))*100#the percentage of my life I have spent at this university
+percentage
+```
+
+##3.4
+Compute the sum of 4, 5, 8 and 11 by first combining
+them into a vector and then using the function
+sum.
+```{r}
+numbers<-c(4,5,8,11)
+sum(x=numbers)
+```
+
+##3.5
+Plot 100 normal random numbers.
+```{r}
+plot(rnorm(100))
+```
+
+##4
+Find help for the sqrt function.
+```{r}
+help(sqrt)#=?sqrt
+```
+
+##5
+Make a file called firstscript.R containing Rcode
+that generates 100 random numbers and plots
+them, and run this script several times.
+```{r}
+source("firstscript.R")
+source("firstscript.R")
+source("firstscript.R")
+```
+
+#6.2
+Put the numbers 31 to 60 in a vector named P and
+in a matrix with 6 rows and 5 columns named Q.
+Tip: use the function seq. Look at the different
+ways scalars, vectors and matrices are denoted in
+the workspace window.
+```{r}
+P<-seq(from=31,to=60,by=1)
+P
+Q<-matrix(data=P,nrow=6,ncol=5)#by colume
+Q
+Q2<-matrix(data=P,nrow=6,ncol=5,byrow=TRUE)#by row
+Q2
+```
+
+##6.3
+Make a script file which constructs three random
+normal vectors of length 100. Call these vectors x1,
+x2 and x3. Make a data frame called t with three
+columns (called a, b and c) containing respectively
+x1, x1+x2 and x1+x2+x3. Call plot(t) for this
+data frame.
+```{r}
+x1<-rnorm(100)
+x2<-rnorm(100)
+x3<-rnorm(100)
+t=data.frame(a=x1,b=x1+x2,c=x1+x2+x3)
+t
+plot(t)
+```
+
+##7
+Add these lines to the script file of the previous
+section. Try to find out, either by experimenting
+or by using the help, what the meaning is of rgb,
+the last argument of rgb, lwd, pch, cex
+```{r}
+plot(t$a, type="l", ylim=range(t),
+lwd=3, col=rgb(1,0,0,0.3))
+lines(t$b, type="s", lwd=2,
+col=rgb(0.3,0.4,0.3,0.9))
+points(t$c, pch=20, cex=4,
+ col=rgb(0,0,1,0.3))
+```
+
+###lwd=線條寬度
+###col(rgb)=線條顏色及深淺
+###pch=點(圖型)的樣式
+###cex=點的大小,
+###type=圖表形式,ylim=y軸座標最小值
+
+##8
+Make a file called tst1.txt in Notepad from the
+example in Figure 4 and store it in your working
+directory. Write a script to read it, to multiply the
+column called g by 5 and to store it as tst2.txt
+```{r}
+d = data.frame(a = c(1,2,4,8,16,32), g = c(2,4,8,16,32,64),x=c(3,6,12,24,48,96))
+d
+write.table(d, file="tst1.txt",row.names=FALSE)
+d2 = read.table(file="tst1.txt",header=TRUE)
+d2$g=d2$g*5
+write.table(d2, file="tst2.txt",row.names=FALSE)
+d2
+```
+
+##9
+Compute the mean of the square root of a vector
+of 100 random numbers. What happens?
+```{r}
+a=rnorm(100)
+a
+b=sqrt(a)
+b
+c=mean(b)
+c
+```
+
+##10.2
+Make a graph with on the x-axis: today, Sinterklaas2017 and your next birthday and on the y-axis the
+number of presents you expect on each of thesedays. Tip: make two vectors first.
+```{r}
+x=strptime(c("20180913","20171205","20190802"),format="%Y%m%d")
+y=c(0,7,5)
+plot(x=x,y=y,pch=20,cex=2)
+```
+
+##11.2
+Make a vector from 1 to 100. Make a for-loop
+which runs through the whole vector. Multiply
+the elements which are smaller than 5 and larger
+than 90 with 10 and the other elements with 0.1
+```{r}
+h=seq(from=1,to=100)
+s=c()
+for (i in 1:length(h))
+{
+  if(h[i]<5|h[i]>90)
+  {
+    s[i]=h[i]*10
+  }else{
+    s[i]=h[i]*0.1
+  }
+}
+s
+```
+
+##11.3
+Write a function for the previous ToDo, so that you
+can feed it any vector you like (as argument). Use
+a for-loop in the function to do the computation
+with each element. Use the standard R function
+length in the specification of the counter.
+```{r}
+fun1=function(h)
+{
+  s=c()
+  for (i in 1:length(h))
+  {
+    if(h[i]<5|h[i]>90)
+    {
+      s[i]=h[i]*10
+    }else{
+      s[i]=h[i]*0.1
+    }
+  }
+  return(s)
+}
+#test
+h=seq(from=-5,to=100)
+fun1(h)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
