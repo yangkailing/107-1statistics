@@ -1,0 +1,242 @@
+---
+title: "homework2"
+author: "b06208016楊鎧綾"
+date: "September 24, 2018"
+output: html_document
+---
+
+#2.8
+##a
+the sample size of the study is 2391<br />
+
+##b
+the observational units is the people aged 65 or older <br />
+
+##c 
+two variables are "attending frequent  religious or not"" and "blood pressure"
+
+##d
+我覺得研究者將observed data當成樣本資料，而且使用敘述統計，描述那些observation的variable之間的關係。<br/>
+但新聞直接將他當成母體，而做出容易誤導觀眾的報導。<br />
+
+#2.20
+explanatory variable is "smoker or lifetime nonsmokers" and it is categorical variables<br/>
+response variable is "developed desease or not" and it is categorical variables, too<br/>
+
+#2.30
+##a
+```{r}
+getab=1700
+all=2470
+paste(round((getab/all)*100, 2), "%", sep="")
+```
+
+##b
+```{r}
+absb=1056
+paste(round((absb/getab)*100, 2), "%", sep="")
+```
+
+##c
+```{r}
+getc=657
+csb=300
+paste(round((csb/getc)*100, 2), "%", sep="")
+```
+
+##d
+```{r}
+getdf=113
+dsb=41
+paste(round((dsb/getdf)*100, 2), "%", sep="")
+```
+
+#2.32
+##a
+```{r}
+age=c("under20","age20~24","age25~29","age30~34","over35")
+per=c(20.9,30.6,24.7,15.7,8.1)
+barplot(per,names.arg = age,xlab="age", main="having first child bar")
+```
+
+##b
+```{r}
+pie(per, labels = paste(per,"%",age), col=c("blue","green","yellow","orange","red"), main="having first child pie") 
+```
+
+##c
+圓餅圖且可以清楚的比較比例資料，可以明顯地知道全部加起來是100%<br />
+而長條圖可以看到在何年齡生第一胎的人較多(時間關係，因為像是34和35歲，雖然只差一歲卻被分成兩群，在圓餅圖中不容易看到群與群之間的關係，但長條圖可以)，而且可以直接對照比例<br/>
+大致上來說我喜歡長條圖，他容易判讀而且可以觀察較多資訊<br />
+
+#2.46
+```{r}
+cd=c(220,20,50,450,300,30,20,50,200,35,25,50,250,100,0,100,20,13,200,2,125,150,90,60)
+stem(cd,scale=1)
+hist(x=cd,breaks=10,xlab="counts of cd",main="have how many cds")
+```
+
+#2.52
+```{r}
+ages=c(42,47,48,49,49,50,50,50,50,51,51,51,52,54,54,55,55,55,55,56,57,57,57,57,57,58,58,59,59,60,60,60,61,61,62,62,62,62,62,63,63,64,64,64,64,67,67,69,74,78)
+```
+
+##a
+```{r}
+hist(ages, breaks=10, main="ages of CEO", xlab="age")
+```
+
+##b
+```{r}
+stem(ages, scale = 1)
+```
+
+##c
+```{r}
+stripchart(ages, method = "stack", offset = .7, at = .3, pch = 19,
+           main = "Dotplot of ages", xlab = "age")
+```
+
+##d
+```{r}
+summary(ages)
+```
+
+<br />
+不管以長條圖、莖葉圖還是點圖來看，此資料都為右偏，從summary的資料來看亦為右偏，最小值到第一四分位距以及到平均數的距離都較最大值為小，因此此資料為右偏
+
+##e
+```{r}
+boxplot(ages)
+```
+<br />
+由盒狀圖的定義，只要有資料與q1或q3距離1.5個IQR，即為outlier。<br />
+由上述盒狀圖所示，此資料具有outlier
+
+##f
+我覺得CEO的薪資比較有可能出現outlier。<br/>雖然是500大企業，但每個公司的資產規模差異可能頗大，痕容易有離群值，而CEO年齡的部分，最年輕到最老的全距本身就比較小，而且能擔任總裁到需要退休的年齡是可以想像的，相較於薪資比較不容易有特例。
+
+#2.66
+```{r}
+blood=c(110,123,132,150,127,118,102,122)
+summary(blood)
+```
+
+##a
+```{R}
+median=122.5
+```
+
+##b
+```{R}
+lowerquartiles=116.0
+upperquartiles=128.2
+```
+
+##c
+```{R}
+IQR=upperquartiles-lowerquartiles
+IQR
+```
+
+##d
+```{r}
+dw=lowerquartiles-1.5*IQR
+#min=102.0
+dw
+up=upperquartiles+1.5*IQR
+#max=150.0
+up
+```
+<br/>比q1小的部分沒有outlier，但比q3大的部分因為最大值大於q3加1.5IQR，因此有outlier存在
+
+##e
+```{r}
+boxplot(blood)
+```
+
+#2.76
+```{r}
+group1=c(2,30,35,70,100,120,135,150,190,200)
+group2=c(8,12,16,29,35,40,45,46,95)
+```
+
+##a
+```{r}
+summary(group1)
+```
+
+##b
+```{r}
+summary(group2)
+```
+
+##c
+```{r}
+max1=200
+min1=2
+max2=95
+min2=8
+range1=max1-min1
+range2=max2-min2
+range1
+range2
+range2<range1
+```
+
+#d
+```{r}
+all=list(group1=group1,group2=group2)
+boxplot(all, col=(c("red","green")),main="Comparisons of population", xlab="group", ylab="population")
+
+```
+
+#2.96
+```{r}
+mean=70
+sd1=5
+sd2=15
+mean+sd1
+mean+sd2
+```
+<br />
+在標準差為5的情況下，若資料為常態分佈，則有(68+16)%的人成績低於75分，而(95+2.5)%的人低於80分，因此若考80分代表成績位於前面2.5%<br />
+而若標準差為15，在常態分佈下，有(68+16)%的人成績低85分，因此若考80分代表成績位於前面16%之後<br />
+因此在平均相同且同樣考80分的狀態下，標準差為5的時候代表表現較好
+
+#2.104
+```{r}
+mean=56
+sd=2
+```
+
+##a
+在常態分佈下，有95%的人距離平均數兩個標準差之內，因此頭型最小的2.5%的人頭圍小於平均數減2個標準差
+```{r}
+mean-2*sd
+```
+
+##b
+在常態分佈下，有95%的人距離平均數兩個標準差之內，因此頭型最大的2.5%的人頭圍大於平均數加2個標準差
+```{r}
+mean+2*sd
+```
+
+##c
+在常態分佈下，有68%的人距離平均數一個標準差之內，因此頭型大小的16%的人頭圍小於平均數加1個標準差
+```{r}
+mean+sd
+```
+
+
+
+
+
+
+
+
+
+
+
+
+

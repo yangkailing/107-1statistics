@@ -104,6 +104,7 @@ points(t$c, pch=20, cex=4,
 
 ###lwd=線條寬度
 ###col(rgb)=線條顏色及深淺
+###the last argument of rgb=透明度
 ###pch=點(圖型)的樣式
 ###cex=點的大小,
 ###type=圖表形式,ylim=y軸座標最小值
@@ -134,6 +135,7 @@ b
 c=mean(b)
 c
 ```
+<br />the answer is Nan
 
 ##10.2
 Make a graph with on the x-axis: today, Sinterklaas2017 and your next birthday and on the y-axis the
@@ -185,6 +187,7 @@ fun1=function(h)
   }
   return(s)
 }
+
 #test
 h=seq(from=-5,to=100)
 fun1(h)
