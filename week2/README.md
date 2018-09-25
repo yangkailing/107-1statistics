@@ -13,6 +13,8 @@ population data(母體)---parameter<br />
 "pie chart" and "bar chart"
 
 ## quantitative variable(連續，常為numeric)
-### five number summary
-median,q1,q3,min,max<br />
+### summarizing
+five number summary：median,q1,q3,min,max<br />
 to see its location(center), spread(range), shape(skewed left or right), and outliers(歧異點)
+### 視覺化
+"histogram", "stem-and-leaf plot", "dot plot", and "boxplot"
