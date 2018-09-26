@@ -1,10 +1,10 @@
 # week2
 ## basic data concepts
-observation(觀測值)樣本中的每個個體，在dataframe中為列<br />
-vriable(變數)每個觀測值的特徵，在dataframe中為欄位名稱<br/>
+1.observation(觀測值)樣本中的每個個體，在dataframe中為列<br />
+2.vriable(變數)每個觀測值的特徵，在dataframe中為欄位名稱<br/>
 。。。。分成categorical variable(類別) 和quantitative variable(連續，常為numeric)<br />
-sample data(樣本)---statistic<br />
-population data(母體)---parameter<br />
+3.sample data(樣本)---statistic<br />
+4.population data(母體)---parameter<br />
 <br />
 ## categorical variable(類別)
 ### summarizing
