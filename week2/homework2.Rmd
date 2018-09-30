@@ -228,8 +228,61 @@ mean+2*sd
 mean+sd
 ```
 
+#r 程式練習
+```{r}
+#method1
+MyOutlierDetect<-function(colna,value){
+  student<-read.csv("Student.csv")
+  if(colna=="GPA"){
+    coln=student$GPA
+  }else if(colna=="MissClass"){
+    coln=student$MissClass
+  }else if(colna=="PartyDays"){
+    coln=student$PartyDays
+  }else if(colna=="StudyHrs"){
+    coln=student$StudyHrs
+  }else{
+    return("please enter those variable which can calculate outliers")
+  }
 
+  
+  s<-quantile(coln,na.rm = TRUE)
+  s
+  IQR<-IQR(coln,na.rm = TRUE)
+  min<-s[2]-1.5*IQR
+  max<-s[4]+1.5*IQR
+  if(value>=min & value<=max){
+    return("NO")
+  }else{
+    return("YES")
+  }
+  
+}
+```
+```{r}
+MyOutlierDetect("GPA",3)
+MyOutlierDetect("MissClass",5)
+MyOutlierDetect("Seat",5)
+```
 
+```{r}
+#method2
+student<-read.csv("Student.csv")
+MyOutlierDetect<-function(x,value){
+  s<-quantile(x,na.rm = TRUE)
+  IQR<-IQR(x,na.rm = TRUE)
+  min<-s[[2]]-1.5*IQR
+  max<-s[[4]]+1.5*IQR
+  if(value>=min & value<=max){
+    return("NO")
+  }else{
+    return("YES")
+  }
+  
+}
+GPA<-student$GPA
+MyOutlierDetect(GPA,5)
+```
 
 
 

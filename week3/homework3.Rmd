@@ -1,0 +1,151 @@
+---
+title: "homework3"
+author: "b06208016楊鎧綾"
+date: "September 29, 2018"
+output: html_document
+---
+
+#7.14
+##a
+because there is six sides and is equally likely
+```{r}
+1/6
+```
+
+##b
+because there is six sides and is equally likely
+```{r}
+(1/6)*2
+```
+
+##c
+because there is six sides and is equally likely,odd number is 1,3,5
+```{r}
+(1/6)*3
+```
+
+#7.32
+##a
+```{r}
+22/190 #pick 3/total
+```
+
+##b
+```{r}
+(2+6)/190 #(pick 1 + pick 10)/total
+```
+
+##c
+```{r}
+(2+22+18+56+14)/190 #(pick 1 + pick 3 + pick 5 + pick 7+ pick 9)/total
+```
+
+# 7.48
+## a
+P(A)=0.55<br/>
+P(AC)=0.45<br/>
+P(B|A)=0.8<br/>
+P(B|AC)=0.1<br/>
+
+##b
+P(A and B)=P(A)*P(B|A)<br/>
+which means those who are republicans and vote for candidate X
+```{r}
+b=0.55*0.8
+b
+```
+
+##c
+P(AC and B)=P(AC)*P(B|AC)<br/>
+which means those who are NOT republicans but vote for candidate X
+```{r}
+c=0.45*0.1
+c
+```
+
+##d
+P(B)=P(A and B)+P(AC and B)<br/>
+means those vote for candidate X
+```{r}
+b+c
+```
+
+##e
+P(B) means the percentage candidate X receive of all of voter, which is 48.5%
+
+#7.66
+A=voter is woman<br/>
+B=voter is democrat<br/>
+P(A and B)=0.2<br/>
+P(A)=0.5<br/>
+P(B|A)=P(A and B)/P(A)
+```{r}
+0.2/0.5
+```
+
+#7.72
+##a
+```{r}
+aa=0.25^3
+aa
+```
+
+##b
+```{r}
+bb=0.4^3
+bb
+```
+
+##c
+aa means who just guess can enter second experiment<br/>
+bb means who have ESP can enter second experiment
+```{r}
+0.5*bb/(0.5*aa+0.5*bb)
+```
+
+#7.76
+#a
+```{r}
+50/10000
+```
+
+##b
+I think it is a good idea because the probability of an accident with a stoplight is 0.01，<br/>
+but the probability of an accident without a stoplight is 0.005<0.01
+
+#r 程式練習
+```{r}
+# Build a simulation function 
+
+SimProb = function(n,m) {
+  
+  # Settings
+  all = 0
+  
+  #模擬n次
+  for (i in 1:n) {
+    
+    # Step1: 每次模擬抽m 包 
+    f.samp = sample(x = 1:4, size = m, replace = T)
+    
+    # Step2: 看有幾次全部都有
+    if (1%in%f.samp & 2%in%f.samp & 3%in%f.samp & 4%in%f.samp) {
+      all = all + 1
+    }
+    
+  }
+  
+  # Step3: Preparing the output message 
+  return(all/n)
+}
+
+
+# 實測 ------------------------------------------------------------------
+
+SimProb(1000,4)
+
+```
+
+
+
+
