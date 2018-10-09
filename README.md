@@ -21,5 +21,8 @@ reading "A (very) short introduction to R.pdf" and creat a html about the essay
 [class note](https://github.com/yangkailing/107-1statistics/tree/master/week3)
 ### at home
 
-
 ### [第三周作業_基礎統計](https://yangkailing.github.io/107-1statistics/week3/homework3.html)
+
+## week4
+
+### [第四周作業_基礎統計](https://yangkailing.github.io/107-1statistics/week4/homework4.html)
