@@ -1,0 +1,226 @@
+---
+title: "homework4"
+author: "b06208016楊鎧綾"
+date: "October 5, 2018"
+output: html_document
+---
+
+#8.18
+##a
+```{r}
+samplespace=c("RR","RL","LR","LL")
+```
+
+##b
+```{r}
+probability=c((7*6)/(10*9),(7*3)/(10*9),(3*7)/(10*9),(3*2)/(10*9))
+data.frame(samplespace,probability) 
+```
+
+##c
+```{r}
+X=c(0,1,2)
+prob=c((7*6)/(10*9),(7*3)/(10*9)+(3*7)/(10*9),(3*2)/(10*9))
+d=data.frame(simpleevent=X,probability=prob)
+d
+```
+
+##d
+```{r}
+barplot(d$probability,names.arg = d$simpleevent, main="pdf", col=rainbow(4),xlab="number of left hand")
+```
+
+#8.40
+##a
+```{r}
+0.2*20+0.8*15
+```
+##b
+a小題的期待值並不代表真正的通勤時間，期待值有一種預定的平均值的概念，預計通勤了很多次以後，把每次平均起來大約是16分鐘，但實際上的通勤時間在題目的假設中是15分鐘或20分鐘，不會有任一次是16分鐘。
+
+#8.50
+X=human wins
+##a
+P(X=5)
+```{r}
+dbinom(5,10,0.5)
+```
+
+##b
+P(X=3),computer wins 7 times means human wins 3 times
+```{r}
+dbinom(3,10,0.5)
+```
+
+##c
+P(X>=7)
+```{r}
+1-pbinom(6,10,0.5)
+```
+
+#8.72
+mean=500,sd=100<br/>
+
+##a
+P(X<=500)
+```{r}
+pnorm(500,500,100)
+```
+
+##b
+P(X<=650)
+```{r}
+pnorm(650,500,100)
+```
+
+##c
+P(X>=700)
+```{r}
+1-pnorm(699,500,100)
+```
+
+##d
+P(500<=X<=700)=P(X<=700)-P(X<500)
+```{r}
+pnorm(700,500,100)-pnorm(499,500,100)
+```
+
+#8.82
+##a
+```{r}
+n=100
+p=0.5
+mean=n*p
+mean
+sd=sqrt(n*p*(1-p))
+sd
+```
+
+##b
+P(N>=60)
+```{r}
+1-pnorm(59,mean,sd)
+```
+
+##c
+```{r}
+1-pnorm(59.5,mean,sd)
+```
+
+##d
+P(N>=60)
+```{r}
+1-pbinom(59,n,p)
+```
+
+##e
+以binomial來計算的機率(也就是d小題)會最接近真正的分布。<br/>
+然後最不準確的是以59來計算的normal approximation。也就是b小題，他距離二項分布的數值最遠，雖然試驗次數很多的時候，二向分布會趨於常態分布，但是畢竟還是有差別，而c小題為經過調整項的，因此b與實際狀況相差最遠。<br/>
+
+#8.90
+##a
+because the heights of adult males is a normal distribution,the minus of two normal distribution is also a normal distribution<br/>
+so X-Y is a normal distribution<br/>
+
+##b
+```{r}
+70-70
+```
+
+##c
+```{r}
+sdd=sqrt((2.8^2)+(2.8^2))
+sdd
+```
+
+##d
+```{r}
+dd=1-pnorm(3,0,sdd)
+dd
+```
+
+##e
+因為為常態分布所以左右對稱，小於-3與大於3的機率相等<br/>
+```{r}
+2*dd
+```
+
+#r function
+##1
+```{r}
+#Generate one binomial random variable
+Bino.event = function(n, p) {
+  simp.event = c()
+  pp = 100*p
+  
+  for (i in 1:n) {
+    samp = sample(1:100, 1, replace = T)
+    
+    # an event with probability p
+    if (samp <= pp) {
+      event = 1
+    } else {
+      event = 0
+    }
+    
+    simp.event[i] = event
+  }
+  
+  x = sum(simp.event)
+  
+  return(x)
+}
+
+# Generate a set of binomial random variable
+bino.set = c()
+
+for (i in 1:100) {
+  bino.set[i] = Bino.event(n = 100000, p = 0.01)
+}
+
+hist(bino.set, prob = T, breaks = 20)
+
+```
+
+##2
+pb為感染人數不超過1050人(<=1050)
+所以1-(pb^4)為市長四年都不會下台的機率
+```{r}
+pb=pbinom(1050,100000,0.01)
+1-(pb^4)
+```
+
+##3
+延續第一小題
+```{r}
+max(bino.set)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
