@@ -4,15 +4,15 @@
 ### in class
 the introduction of statistics and rStudio
 ### at home
-reading "A (very) short introduction to R.pdf" and creat a html about the essay
-### [第一周作業_文章筆記](https://yangkailing.github.io/107-1statistics/week1/hw1.html)
+reading "A (very) short introduction to R.pdf" and creat a html about the essay<br/>
+[第一周作業_文章筆記](https://yangkailing.github.io/107-1statistics/week1/hw1.html)
 
 ## week2
-[class note](https://github.com/yangkailing/107-1statistics/tree/master/week2)
+[class note](https://github.com/yangkailing/107-1statistics/tree/master/week2)<br/>
 [第二周作業_基礎統計](https://yangkailing.github.io/107-1statistics/week2/homework2.html)
 
 ## week3
-[class note](https://github.com/yangkailing/107-1statistics/tree/master/week3)
+[class note](https://github.com/yangkailing/107-1statistics/tree/master/week3)<br/>
 [第三周作業_機率](https://yangkailing.github.io/107-1statistics/week3/homework3.html)
 
 ## week4
