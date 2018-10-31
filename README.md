@@ -17,3 +17,10 @@ reading "A (very) short introduction to R.pdf" and creat a html about the essay<
 
 ## week4
 [第四周作業_二項分布與常態分布](https://yangkailing.github.io/107-1statistics/week4/homework4.html)
+
+## week6
+[第六周期中](https://yangkailing.github.io/107-1statistics/week6_midexam/mid_exam.html)<br/>
+[前六周整理](https://yangkailing.github.io/107-1statistics/week6_midexam/often_use.html)
+
+## week7
+[第七周作業_population 推估 sample](https://yangkailing.github.io/107-1statistics/week7/homework_7.html)
