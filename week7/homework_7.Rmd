@@ -1,0 +1,595 @@
+---
+title: "homework_7"
+author: "b06208016楊鎧綾"
+date: "2018年10月26日"
+output: html_document
+---
+
+##9.42
+###a
+1.know the population happened probability is 0.05<br/>
+2.data collection is random and repeat many times<br/>
+3.np and n(1-p) must be at least 10,this is 20 and 380<br/>
+
+###b
+```{r}
+n=400
+p=0.05
+```
+<br/>**n=400 and p =0.05**<br/>
+
+###c
+```{r}
+mean=p;mean
+sd=sqrt(p*(1-p)/n);sd
+```
+<br/>**mean of phat is 0.05;sd of phat is 0.01089725**<br/>
+
+###d
+```{r}
+28/400
+1-pnorm(28/400,mean,sd)
+```
+<br/>**the proportion is 0.07;0.033 exceed it**<br/>
+
+##sampling distribution
+```{r}
+#sampling one time(function is for making one mean)
+#機率為p的時候抽n個，回傳成功的機率
+bino.x=function(n,p){
+  pp=p*100
+  samp=sample(1:100,n,replace=T)#隨機抽n個
+  response=c()
+  #確認哪些符合條件
+  for (i in 1:length(samp)){
+    if (samp[i]<=pp){
+      response[i]=1
+    }else{
+      response[i]=0
+    }
+  }
+  p=sum(response)/n
+  return(p)#回傳符合的比例
+}
+
+#sampling multiple times
+#return 1000 phat
+simu.phat=c()
+for (j in 1:1000){
+  x=bino.x(400,0.05)
+  simu.phat[j]=x
+}
+```
+```{r}
+#計算模擬的phat的mean和sd
+simu.mean=mean(simu.phat)
+simu.sd=sd(simu.phat)
+#計算理論的phat的mean和sd
+n=400
+p=0.05
+theo.mean=p
+theo.sd=sqrt(p*(1-p)/n)
+```
+```{r}
+#draw sample distribution
+hist(simu.phat,probability = T,breaks = 20,main="sample distribution of phat by sampling",xlab="phat",col = "gold",border="white",ylim=c(0,40))
+#加上理論的部分
+curve(dnorm(x,theo.mean,theo.sd),add=T,col="navy",lwd=2)
+```
+
+## 9.54
+###a
+```{r}
+p1=0.51
+mean1=p1;mean1
+sd1=sqrt(p1*(1-p1)/500);sd1
+curve(dnorm(x,mean1,sd1),lwd=2,xlim=c(0.3,0.7),main="sampling distribution plot of phat1",xlab="sample proportations",ylab="density")
+```
+<br/>**sampling distribution of phat1:mean=0.51;sd=0.02235621**
+
+##b
+```{r}
+p2=0.48
+mean2=p2
+sd2=sqrt(p2*(1-p2)/500)
+mean=mean1-mean2;mean
+```
+<br/>**the mean is 0.03**
+
+##C
+```{r}
+sd=sqrt((sd1)^2+(sd2)^2);sd
+```
+<br/>**the sd is 0.03160696**
+
+##d
+```{r}
+curve(dnorm(x,mean,sd),lwd=2,main="sampling distribution of phat1-phat2",xlim=c(-0.2,0.2),xlab="sample proportations",ylab="density")
+
+```
+
+##e
+```{r}
+x=seq(-0.2,0.2,length.out=1000)
+y=dnorm(x,mean,sd)
+curve(dnorm(x,mean,sd),lwd=2,main="sampling distribution of phat1-phat2",xlim=c(-0.2,0.2),xlab="sample proportations",ylab="density")
+## Add the polygon
+region.x = x[x<=0]
+region.y = y[x<=0]
+region.x2 = c(region.x,0)
+region.y2 = c(region.y, 0)
+polygon(region.x2, region.y2, col = "red")
+```
+<br/>**answer is the polygon of red color**
+
+## f
+```{r}
+z=(0-mean)/sd
+z
+```
+**根據查表為0.1736**
+
+##9.68
+###a
+```{r}
+xx = seq(0, 300, length.out = 1000)
+yy = dnorm(xx, mean = 80, sd = 50)
+plot(x = xx, y = yy, type = "l", main = "distribution of number of miles")
+```
+
+```{r}
+xsam<-rnorm(1000,80,50)
+xsam=xsam[xsam>0]
+mean(xsam)>median(xsam)
+hist(xsam,breaks=20,xlim=c(0,300),main="distribution of number of miles by simulate",xlab="miles",ylab="probability",prob=T)
+abline(v = mean(xsam), col = "red")
+abline(v = median(xsam), col = "blue")
+```
+<br/>**因為miles一定大於0，因此小於0的部分不能看，而根據上圖可發現右邊拉比較長，且mean>median，因此是skewed-right，不是normal distribution**
+
+###b
+```{r}
+#sample one time
+#每次有n個觀測者
+norm.x=function(n,mu,sigma){
+  samp=rnorm(n,mu,sigma)
+  xbar=mean(samp)
+  return(xbar)
+}
+#sample multiple times
+simu.xbar=c()
+for (j in 1:1000){
+  x=norm.x(365,80,50)
+  simu.xbar[j]=x
+}
+```
+```{r}
+#計算模擬的xbar的mean和sd
+simu.mean=mean(simu.xbar)
+simu.sd=sd(simu.xbar)
+#計算理論的xbar的mean和sd
+mu=80
+sigma=50
+n=365
+theo.mean=mu;theo.mean
+theo.sd=sigma/sqrt(n);theo.sd
+```
+```{r}
+#draw sample distribution
+hist(simu.xbar,probability = T,breaks = 20,main="sample distribution of xbar by sampling",xlab="xbar",col = "gold",border="white")
+#加上理論的部分
+curve(dnorm(x,80,2.61712),add=T,col="navy",lwd=2)
+```
+<br/>**mean of xbar is 80,sd is2.61712**<br/>
+
+###c
+```{r}
+mean=80*365;mean
+sd=sqrt(365)*50;sd
+xx = seq(20000, 40000, length.out =20001)
+yy = dnorm(xx, mean, sd)
+plot(x = xx, y = yy, type = "l", main = "distribution of number of miles of  a year")
+```
+<br/>**apporximate distribution is:mean=29200,sd=955.2487**<br/>
+
+###d
+<br/>b小題的曲線是常態分佈是可能的，因為他是xbar的分布圖，只要符合隨機抽樣的數量夠多(>30)或是成常態分布，他的xbar就會成常態分布<br/>
+
+##9.74
+###a
+<br/>mu_d which means the mean of the differense of each pair of population,which belongs to SD Module 4:paired difference<br/>
+
+###b
+<br/>dbar which means the mean of the differense of each sample pair<br/>
+
+###c
+<br/>yes it would change because new condition is independent but original condition is dependent<br/>
+it would change to mu1-mu2 and s1-s2<br/>
+
+###d
+```{r}
+mean=10;mean
+sd=5/sqrt(50);sd
+mean+3*sd
+mean-3*sd
+```
+<br/>**the sampling distribution of xbar :mean=10,sd=0.7071068**<br/>
+
+###e
+```{r}
+#sample one time
+#每次有n個觀測者
+norm.x=function(n,mu,sigma){
+  samp=rnorm(n,mu,sigma)
+  xbar=mean(samp)
+  return(xbar)
+}
+#sample multiple times
+simu.xbar=c()
+for (j in 1:1000){
+  x=norm.x(50,10,5)
+  simu.xbar[j]=x
+}
+```
+```{r}
+#計算模擬的xbar的mean和sd
+simu.mean=mean(simu.xbar)
+simu.sd=sd(simu.xbar)
+#計算理論的xbar的mean和sd
+mu=10
+sigma=5
+n=50
+theo.mean=mu
+theo.sd=sigma/sqrt(n)
+```
+```{r}
+#draw sample distribution
+hist(simu.xbar,probability = T,breaks = 20,main="sample distribution of xbar by sampling",xlab="xbar",col = "gold",border="white")
+#加上理論的部分
+curve(dnorm(x,theo.mean,theo.sd),add=T,col="navy",lwd=2)
+```
+
+###f
+I would be surprised if store band has higher mean number of unpopped kernels;
+<br/>because according to theory of normal curve, 99.7% of xbar should between mean-3sd=7.87 and mean+3sd=12.1,<br/>which means store band should have less unpopped kernel between 7 and 12.<br/>It is less likely that store band has more unpopped kernels<br/>
+
+##9.80
+###a,b
+```{r}
+mu1=4.5
+sigma1=1.5
+mu2=8
+sigma2=2
+mean=mu2-mu1;mean
+sd=sqrt((sigma2^2/23)+(sigma1^2/25));sd
+```
+**the sampling distribution of xbar2-xbar1 :mean=3.5,sd=0.5137247**
+
+
+###c
+```{r}
+curve(dnorm(x,mean,sd),lwd=2,main="sampling distribution of xbar2-xbar1",xlim=c(1.5,5.5),xlab="xbar2-xbar1",ylab="density")
+```
+
+###d
+```{r}
+#z-score
+z=(3.6-3.5)/0.5137247
+z
+```
+**z=0.19代表距離平均數0.19個表準差,so it is reasonable(只要小於3個標準差就有可能發生)**
+
+###e
+```{r}
+#z-score
+z=(0-3.5)/0.5137247
+z
+```
+**z=-6.81代表距離平均數6.81個表準差,so it is not reasonable(需要小於3個標準差才可能發生)**
+
+##9.106
+###a
+```{r}
+mu=100
+sigma=15
+sd=15/sqrt(36)
+z1=(97-mu)/sd;z1
+```
+**standardized for xbar 97 is -1.2**
+
+###b
+```{r}
+z2=(105-mu)/sd;z2
+```
+**standardized for 105 is 2**
+
+###c
+```{r}
+mean=mu;mean
+sd=sigma/sqrt(36);sd
+```
+**sampling distribution of xbar is mean=100,sd=2.5**
+
+###d
+```{r}
+#sample one time
+#每次有n個觀測者
+norm.x=function(n,mu,sigma){
+  samp=rnorm(n,mu,sigma)
+  xbar=mean(samp)
+  return(xbar)
+}
+#sample multiple times
+simu.xbar=c()
+for (j in 1:1000){
+  x=norm.x(36,100,15)
+  simu.xbar[j]=x
+}
+```
+```{r}
+#計算模擬的xbar的mean和sd
+simu.mean=mean(simu.xbar)
+simu.sd=sd(simu.xbar)
+#計算理論的xbar的mean和sd
+mu=100
+sigma=15
+n=36
+theo.mean=mu
+theo.sd=sigma/sqrt(n)
+```
+```{r}
+#draw sample distribution
+hist(simu.xbar,probability = T,breaks = 20,main="sample distribution of xbar by sampling",xlab="xbar",col = "gold",border="white",ylim=c(0,0.2))
+#加上理論的部分
+curve(dnorm(x,theo.mean,theo.sd),add=T,col="navy",lwd=2)
+abline(v = 97, col = "red")
+abline(v = 105, col = "blue")
+```
+
+###e
+```{r}
+#z-score
+simu.z=(simu.xbar-theo.mean)/theo.sd
+#distribution of z-score
+hist(simu.z,probability = T,breaks = 20,main="standardized sample distribution",xlab="standard xbar",col = "gold",border="white",ylim=c(0,0.45))
+curve(dnorm(x,0,1),add=T,col="navy",lwd=2)
+abline(v = z1, col = "red")
+abline(v = z2, col = "blue")
+```
+
+###f
+兩張圖的差別在d小題是用模擬的，模擬每次抽驗36人抽1000次平均數的分布<br/>
+而e小題是用理論值來看，將sample的平均數標準化後看跟平均數差幾個標準差(曲線部分)，<br/>
+理論上來說兩者的分布應該非常相近，只是e小題是將d小題標準化後的樣子<br/>
+
+##r studio
+
+###example9.4
+```{r}
+#sampling one time(function is for making one mean)
+#機率為p的時候抽n個，回傳成功的機率
+bino.x=function(n,p){
+  pp=p*10
+  samp=sample(1:10,n,replace=T)#隨機抽n個
+  response=c()
+  #確認哪些符合條件
+  for (i in 1:length(samp)){
+    if (samp[i]<=pp){
+      response[i]=1
+    }else{
+      response[i]=0
+    }
+  }
+  return(sum(response)/n)#回傳符合的比例
+}
+
+#sampling multiple times
+#return 400 phat
+simu.phat=c()
+for (j in 1:400){
+  x=bino.x(2400,0.4)
+  simu.phat[j]=x
+}
+```
+```{r}
+#計算模擬的phat的mean和sd
+simu.mean=mean(simu.phat)
+simu.sd=sd(simu.phat)
+#計算理論的phat的mean和sd
+n=2400
+p=0.4
+theo.mean=p
+theo.sd=sqrt(p*(1-p)/n)
+```
+```{r}
+#draw sample distribution
+hist(simu.phat ,breaks = 20, prob = T ,main="histogram of sample proportions with normal curve",xlab="phat",col = "gold",border="white")
+#加上理論的部分
+curve(dnorm(x,theo.mean,theo.sd),add=T,col="navy",lwd=2)
+```
+<br/>**根據疊圖可看出兩個曲線相差不大，模擬和理論值差不多**<br/>
+```{r}
+#z-score
+simu.z=(simu.phat-theo.mean)/theo.sd
+#distribution of z-score
+hist(simu.z,probability = T,breaks = 20,main="standardized sample distribution",xlab="standard phat",col="blue",border = "white")
+```
+
+###example9.6
+```{r}
+#sampling one time(function is for making one mean)
+#機率為p的時候抽n個，回傳成功的機率
+bino.x=function(n,p){
+  pp=p*100
+  samp=sample(1:100,n,replace=T)#隨機抽n個
+  response=c()
+  #確認哪些符合條件
+  for (i in 1:length(samp)){
+    if (samp[i]<=pp){
+      response[i]=1
+    }else{
+      response[i]=0
+    }
+  }
+  return(sum(response)/n)#回傳符合的比例
+}
+
+#sampling multiple times
+#return 400 phat
+simu.phat=c()
+for (j in 1:1000){
+  x=bino.x(1017,0.37)-bino.x(885,0.27)
+  simu.phat[j]=x
+}
+```
+```{r}
+#計算模擬的phat的mean和sd
+simu.mean=mean(simu.phat)
+simu.sd=sd(simu.phat)
+#計算理論的phat的mean和sd
+theo.mean=0.37-0.27
+theo.sd=sqrt(0.37*(1-0.37)/1017+0.27*(1-0.27)/885)
+```
+```{r}
+#draw sample distribution
+hist(simu.phat,probability = T,breaks = 20,main="histogram of sample proportions with normal curve",xlab="phat1-phat2",col = "gold",border="white")
+#加上理論的部分
+curve(dnorm(x,theo.mean,theo.sd),add=T,col="navy",lwd=2)
+```
+<br/>**根據疊圖可看出兩個曲線相差不大，模擬和理論值差不多**<br/>
+```{r}
+#z-score
+simu.z=(simu.phat-theo.mean)/theo.sd
+#distribution of z-score
+hist(simu.z,probability = T,breaks = 20,main="standardized sample distribution",xlab="standard phat1-phat2",col="blue",border = "white")
+```
+
+###example9.8
+```{r}
+#sample one time
+#每次有n個觀測者
+norm.x=function(n,mu,sigma){
+  samp=rnorm(n,mu,sigma)
+  xbar=mean(samp)
+  return(xbar)
+}
+#sample multiple times
+simu.xbar=c()
+for (j in 1:400){
+  x=norm.x(25,8,5)
+  simu.xbar[j]=x
+}
+```
+```{r}
+#計算模擬的xbar的mean和sd
+simu.mean=mean(simu.xbar)
+simu.sd=sd(simu.xbar)
+#計算理論的xbar的mean和sd
+mu=8
+sigma=5
+n=25
+theo.mean=mu
+theo.sd=sigma/sqrt(n)
+```
+```{r}
+#draw sample distribution
+hist(simu.xbar,probability = T,breaks = 20,main="sample distribution of xbar by sampling",xlab="xbar",col = "gold",border="white",ylim=c(0,0.4))
+#加上理論的部分
+curve(dnorm(x,theo.mean,theo.sd),add=T,col="navy",lwd=2)
+```
+<br/>**根據疊圖可看出兩個曲線相差不大，模擬和理論值差不多**<br/>
+```{r}
+#z-score
+simu.z=(simu.xbar-theo.mean)/theo.sd
+#distribution of z-score
+hist(simu.z,probability = T,breaks = 20,main="standardized sample distribution",xlab="standard xbar",col="blue",border = "white")
+```
+
+###example9.9
+```{r}
+#sample one time
+#每次有n個觀測者
+norm.x=function(n,mu,sigma){
+  samp=rnorm(n,mu,sigma)
+  xbar=mean(samp)
+  return(xbar)
+}
+#sample multiple times
+simu.xbar=c()
+for (j in 1:1000){
+  x=norm.x(60,0,7)
+  simu.xbar[j]=x
+}
+```
+```{r}
+#計算模擬的xbar的mean和sd
+simu.mean=mean(simu.xbar)
+simu.sd=sd(simu.xbar)
+#計算理論的xbar的mean和sd
+mu=0
+sigma=7
+n=60
+theo.mean=mu
+theo.sd=sigma/sqrt(n)
+```
+```{r}
+#draw sample distribution
+hist(simu.xbar,probability = T,breaks = 20,main="sample distribution of dbar by sampling",xlab="dbar",col = "gold",border="white")
+#加上理論的部分
+curve(dnorm(x,theo.mean,theo.sd),add=T,col="navy",lwd=2)
+```
+<br/>**根據疊圖可看出兩個曲線相差不大，模擬和理論值差不多**<br/>
+```{r}
+#z-score
+simu.z=(simu.xbar-theo.mean)/theo.sd
+#distribution of z-score
+hist(simu.z,probability = T,breaks = 20,main="standardized sample distribution",xlab="standard dbar",col="blue",border = "white")
+```
+
+###example9.10
+此題沒有提供母體的平均數和標準差，因此此計算是以樣本的平均數和標準差來計算
+```{r}
+#sample one time
+#每次有n個觀測者
+norm.x=function(n,mu,sigma){
+  samp=rnorm(n,mu,sigma)
+  xbar=mean(samp)
+  return(xbar)
+}
+#sample multiple times
+simu.xbar=c()
+for (j in 1:1000){
+  x=norm.x(87,107,17)-norm.x(102,88,15)
+  simu.xbar[j]=x
+}
+```
+```{r}
+#計算模擬的xbar的mean和sd
+simu.mean=mean(simu.xbar);simu.mean
+simu.sd=sd(simu.xbar);simu.sd
+#計算理論的xbar的mean和sd
+theo.mean=0;theo.mean
+theo.sd=sqrt(15^2/87+15^2/102);theo.sd
+```
+```{r}
+#draw sample distribution
+hist(simu.xbar,probability = T,breaks = 20,main="sample distribution of xbar1-xbar2 by sampling",xlab="xbar1-xbar2",col = "gold",border="white",xlim=c(-10,30),ylim=c(0,0.2))
+#加上理論的部分
+curve(dnorm(x,theo.mean,theo.sd),add=T,col="navy",lwd=2,xlim=c(-7,7))
+```
+<br/>**根據疊圖可看出兩個曲線相差很大，已知真實的差距是0，根據曲線可推估此次的sample 是outlier **<br/>
+
+```{r}
+#z-score
+simu.z=(simu.xbar-theo.mean)/theo.sd
+#distribution of z-score
+hist(simu.z,probability = T,breaks = 20,main="standardized sample distribution",xlab="standard xbar1-xbar2",col="blue",border = "white")
+```
+
+
+
+
+
+
+
+

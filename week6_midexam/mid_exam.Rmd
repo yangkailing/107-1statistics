@@ -1,0 +1,287 @@
+---
+title: "mid_exam"
+author: "b06208016楊鎧綾"
+date: "October 17, 2018"
+output: html_document
+---
+
+#1
+##(1)
+```{r}
+cho=c(196,198,212,182,200,222,249,198,206,188,178,166,184,204,198,178,160,164,182,230)
+hist(cho,col="blue",breaks = 10, main="Histogram", xlab="cholestro level",ylab = "amount of people")
+axis(side = 1, at = seq(160,250,by=10))
+```
+<br/>**as the histogram show**
+
+##(2)
+```{r}
+boxplot(cho, col="blue", main="boxplot", xlab="observation", ylab="cholestro level" )
+```
+<br/>**as the boxplot show**
+
+##(3)
+```{r}
+MyOutlierDetect<-function(x,value){
+  s<-quantile(x,na.rm = TRUE)
+  IQR<-IQR(x,na.rm = TRUE)
+  min<-s[[2]]-1.5*IQR
+  max<-s[[4]]+1.5*IQR
+  if(value>=min & value<=max){
+    return("NO")
+  }else{
+    return("YES")
+  }
+  
+}
+
+out=c()
+for (i in 1:20){
+out[i]=MyOutlierDetect(cho,cho[i])
+}
+out
+cho[out=="YES"]
+```
+**249 is a outlier**
+
+
+##(4)
+```{r}
+summary(cho)
+```
+<br/>**min=160.0；$q_{1}$=181.0；median=197.0；$q_{3}$=204.5；max=249.0**
+
+##(5)
+**由barplot來看此圖型為skewed-right；由five-number summary來看$q_{1}$-min=21,max-$q_{3}$=44.5，可以確定此分布為右偏**
+
+#2
+註:table A 的方式皆為標準化後進行查表<br/>
+
+##(1)
+###code
+P(62<=X<=65)=P(X<=65)-P(X<62)
+```{r}
+mean=65
+sd=2.7
+pnorm(65,mean,sd)-pnorm(62,mean,sd)
+```
+###table A
+```{r}
+a=(62-mean)/sd
+a
+b=(65-mean)/sd
+b
+```
+經由查表<br/>
+P(z<(-1.11))=0.1335<br/>
+P(z<0)=0.5<br/>
+所求為<br/>
+P(z<0)-P(z<(-1.11))=0.3665<br/>
+```{r}
+0.5-0.1335
+```
+
+**code:0.3667397,table A:0.3665**
+
+##(2)
+###code
+P(X<70)
+```{r}
+pnorm(70,mean,sd)
+```
+###table A
+```{r}
+c=(70-mean)/sd
+c
+```
+經由查表<br/>
+P(z<1.85)=0.9678<br/>
+**code:0.9679765；table A:0.9678**
+
+##(3)
+### CODE
+P(X<60)=1-P(X<=60)
+```{r}
+1-pnorm(60,mean,sd)
+```
+###table A
+```{r}
+d=(60-mean)/sd
+d
+```
+經由查表<br/>
+P(z<(-1.85))=0.0322<br/>
+所求為<br/>
+1-P(z<(-1.85))=0.9678<br/>
+**code:0.9679765；table A:0.9678**
+
+##(4)
+### code
+P(X>70) or P(X<60)，因為兩者互斥，所以機率為P(X<60)+P(X>70)
+```{r}
+pnorm(60,mean,sd)+(1-pnorm(70,mean,sd))
+```
+###table A
+
+經由查表<br/>
+P(X<=60):P(z<(-1.85))=0.0322<br/>
+P(X<=70):P(z<1.85)=0.9678<br/>
+所求為<br/>
+P(X>70)+P(X<=60)<br/>
+```{r}
+(1-0.9678)+0.0322
+```
+**code:0.0640471；table A:0.0644**
+
+#3
+##(1)
+假設A為代表泛藍選民的事件<br/>
+已知<br/>
+P(A)=0.6<br/>
+P(AC)=0.4<br/>
+求P(KP)<br/>
+P(KP|A)=0.4<br/>
+P(KP|AC)=0.5<br/>
+P(KP)=P(A)P(KP|A)+P(AC)P(KP|AC)=0.44<br/>
+```{r}
+0.6*0.4+0.4*0.5
+```
+求P(DD)<br/>
+P(DD|A)=0.55<br/>
+P(DD|AC)=0.05<br/>
+P(DD)=P(A)P(DD|A)+P(AC)P(DD|AC)=0.35<br/>
+```{r}
+0.6*0.55+0.4*0.05
+```
+求P(YY)<br/>
+P(YY|A)=0.05<br/>
+P(YY|AC)=0.45<br/>
+P(YY)=P(A)P(YY|A)+P(AC)P(YY|AC)=0.21<br/>
+```{r}
+0.6*0.05+0.4*0.45
+```
+**估計KP,DD,YY各自的得票率為44%,35%,21%**
+
+##(2)
+假設YY要提高X的支持率<br/>
+KP=0.24+0.4(0.5-X)=0.44-0.4X<br/>
+YY=0.03+0.4(0.45+X)=0.21+0.4X<br/>
+0.44-0.4X<0.21+0.4X<br/>
+0.23<0.8X<br/>
+X>(23/80)<br/>
+```{r}
+23/80
+```
+**要提高28.75%以上非泛藍選民對YY的支持度**
+
+#4
+##(1)
+假設
+A=在終點誤點的事件
+B=在起點誤點的事件
+已知
+P(A)=0.1；P(AC)=0.9；
+P(B|A)=0.8；P(BC|A)=0.8；
+P(B|AC)=0.1；P(BC|AC)=0.9
+所求
+P(AC|B)=P(AC and B)/P(B)
+```{r}
+(0.9*0.1)/((0.9*0.1)+(0.1*0.8))
+```
+**在起點機場起飛誤點的情況下，在終點機場準時抵達的機率為0.5294118**
+
+##(2)
+```{r}
+p=(0.2*0.1)/((0.2*0.1)+(0.9*0.9))
+200*p*100
+```
+p為飛機準時出發但在終點機場誤點的機率，即P(A|BC)=P(A and BC)/P(BC)<br/>
+200*p為估計此生會發生飛機準時出發但在終點機場誤點的期望值，再將此乘以100美元，即為預計此生可得賠償金額的期望值<br/>
+**481.9277美元**
+
+
+#5
+##(1)
+```{r}
+xvalue<-seq(0, 200,length.out =  201)
+yvalue<-dbinom(xvalue, size=10000, prob=0.01)
+plot(xvalue, yvalue, main="the pdf of broken bikes", type="l",xlab="number of broken bikes",ylab="probability")
+```
+
+##(2)
+400*30%=120所求為每天有超過120個租借站出現故障車輛的機率，即P(X>120)=1-P(X<=120)<br/>
+利用期望值的概念10000*0.01=100,每天預計出現100台故障車<br/>
+全部共有400個租借站，所以每個租借站出現故障的機率為0.25<br/>
+```{r}
+1-pbinom(120,400,0.25)
+```
+**每天有超過30%的租借站出現故障車的機率為0.009970218**
+
+##(3)
+```{r}
+mutate<-rbinom(365,10000,0.01)
+```
+```{r}
+#利用boxplot 觀察
+boxplot(mutate, main="the amount of broken bikes", xlab="mutate", ylab="Count" )
+```
+```{r}
+MyOutlierDetect<-function(x,value){
+  s<-quantile(x,na.rm = TRUE)
+  IQR<-IQR(x,na.rm = TRUE)
+  min<-s[[2]]-1.5*IQR
+  max<-s[[4]]+1.5*IQR
+  if(value>=min & value<=max){
+    return("NO")
+  }else{
+    return("YES")
+  }
+  
+}
+```
+```{r}
+is.out<-c()
+for(i in 1:365){
+  is.out[i]<-MyOutlierDetect(mutate,mutate[i])
+}
+length(is.out[is.out=="YES"])
+```
+**the answer is as the code answer**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

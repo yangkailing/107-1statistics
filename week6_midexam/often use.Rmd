@@ -1,0 +1,130 @@
+---
+title: "often use"
+author: "b06208016楊鎧綾"
+date: "October 16, 2018"
+output: html_document
+---
+### 基本
+```{r}
+Student <- read.csv("Student.csv")
+```
+```{r}
+#  vector
+X1<-c(1,2,3,4)
+X1
+
+#  Matrix
+X2<-matrix(1:12, nrow=2)
+X2
+
+#  Data Frame
+x1=c(1:10)
+y1=c(11:20)
+z1=c(21:30)
+DF1<-data.frame(XX=x1,YY=y1,ZZ=z1)   #換欄位的名字
+DF1
+
+#  List     一串雜記，可以想像是一張筆記紙，可以放任何東西
+LIST1 <- list(gender="man", age=18, hobby=c("tease", "be teased"))
+LIST1
+
+#  Factor  主要用來表有等級或類別屬性的資料(category variable)。
+grade <- c("Poor","Excellent","Improved","Excellent","Improved")  # 建立一個character vector
+grade <- factor(grade)   # 轉換成factor型態
+levels(grade)           #要查看裡面存在著哪些類別，可以用levels()函式：
+
+G = factor(grade, level=c("Poor","Improved","Excellent"), order=TRUE)
+levels(G)
+# Crosstabs 列連表
+Sex<-Student$Sex
+ReligImp<-Student$ReligImp
+mytable <- xtabs(~Sex+ReligImp)   
+mytable
+```
+
+### 畫圖
+#### pie chart
+```{r}
+counts <- table(Student$ReligImp)    
+#"table是負責把資料整理為一個列連表的形式
+#如果沒有用table，出來的資料是沒有經過整理的一大段資料)"
+pct <- round(counts/sum(counts)*100)  #round功能：去掉小數的部分且進位
+lbls <- rownames(counts)
+lbls <- paste(lbls,pct,"%",sep=" ")    # sep"放入想要分隔的符號"
+pie(counts, labels = lbls , col=c("gray10","gray30","gray50","gray70" ,"gray90") , main="pie chart") 
+```
+
+#### Bar Plot
+```{r}
+barplot(counts, names.arg =rownames(counts) ,legend = rownames(counts), main="bar graph", col=c("gray10","gray30","gray50","gray70" ,"gray90"),ylab = '次數', xlab = 'xlab',beside="TRUE")
+```
+
+#### Histogram
+```{r}
+hist(Student$GPA, breaks=10, col="blue", main="Histogram", xlab="GPA",ylab = "人數")
+```
+
+#### Boxplot
+```{r}
+#y~x
+boxplot(GPA~Sex, Student, col=(c("red","blue")), 
+        main="Comparisons of GPA", xlab="Gender", ylab="GPA" )
+```
+#### Stem-and-leaf plot
+```{r}
+GPA<- Student$GPA
+stem(GPA, scale = 1)
+```
+#### dot plot
+```{r}
+stripchart(GPA, method = "stack", offset = .35, at = .0, pch = 19,
+           main = "Dotplot of GPA", xlab = "GPA")
+```
+
+### 統計
+```{r}
+summary(GPA) # mean, median, Q25 and Q75, min, max
+mean(GPA, na.rm = T)
+var(GPA, na.rm = T) 
+sd(GPA, na.rm = T) 
+IQR(GPA, na.rm = T)
+
+# Binomial function
+pbinom(35, size = 100, prob = 0.3) #given x, size, prob --> cumulative probability P(X<=35)
+dbinom(35, size = 100, prob = 0.3) #given x, size, prob --> probability P(X==35)
+
+qbinom(0.8839214, size = 100, prob = 0.3) #given cumulative probability 
+rbinom(10, size = 100, prob = 0.3) #random samples from a binomial distribution of given size, prob
+
+
+# Normal distribution function
+pnorm(35, mean = 30, sd = 5) #given mean, sd --> cumulative probability
+dnorm(35, mean = 30, sd = 5) #given mean, sd --> density
+
+qnorm(0.8413447, mean = 30, sd = 5) #given cumulative probability --> x
+rnorm(10, mean = 30, sd = 5) #random samples from a normal distribution of given mean, sd
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

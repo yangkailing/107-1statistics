@@ -1,0 +1,116 @@
+---
+title: "function"
+author: "b06208016楊鎧綾"
+date: "October 29, 2018"
+output: html_document
+---
+
+```{r}
+#sampling one time(function is for making one mean)
+#機率為p的時候抽n個，回傳成功的機率
+bino.x=function(n,p){
+  pp=p*10
+  samp=sample(1:10,n,replace=T)#隨機抽n個
+  response=c()
+  #確認哪些符合條件
+  for (i in 1:length(samp)){
+    if (samp[i]<=pp){
+      response[i]=1
+    }else{
+      response[i]=0
+    }
+  }
+  return(sum(response)/n)#回傳符合的比例
+}
+
+#sampling multiple times
+#return 1000 phat
+simu.phat=c()
+for (j in 1:1000){
+  x=bino.x(2400,0.4)
+  simu.phat[j]=x
+}
+```
+```{r}
+#計算模擬的phat的mean和sd
+simu.mean=mean(simu.phat);simu.mean
+simu.sd=sd(simu.phat);simu.sd
+#計算理論的phat的mean和sd
+n=2400
+p=0.4
+theo.mean=p;theo.mean
+theo.sd=sqrt(p*(1-p)/n);theo.sd
+```
+```{r}
+#draw sample distribution
+hist(simu.phat,probability = T,breaks = 20,main="sample distribution of phat by sampling",xlab="phat",col = "gold",border="white")
+#加上理論的部分
+curve(dnorm(x,theo.mean,theo.sd),add=T,col="navy",lwd=2)
+```
+```{r}
+#z-score
+simu.z=(simu.phat-theo.mean)/theo.sd
+#distribution of z-score
+hist(simu.z,probability = T,breaks = 20,main="standardized sample distribution",xlab="standard phat",col="blue",border = "white")
+```
+
+
+
+```{r}
+#sample one time
+#每次有n個觀測者
+norm.x=function(n,mu,sigma){
+  samp=rnorm(n,mu,sigma)
+  xbar=mean(samp)
+  return(xbar)
+}
+#sample multiple times
+simu.xbar=c()
+for (j in 1:1000){
+  x=norm.x(25,8,5)
+  simu.xbar[j]=x
+}
+```
+```{r}
+#計算模擬的xbar的mean和sd
+simu.mean=mean(simu.xbar);simu.mean
+simu.sd=sd(simu.xbar);simu.sd
+#計算理論的xbar的mean和sd
+mu=8
+sigma=5
+n=25
+theo.mean=mu;theo.mean
+theo.sd=sigma/sqrt(n);theo.sd
+```
+```{r}
+#draw sample distribution
+hist(simu.xbar,probability = T,breaks = 20,main="sample distribution of xbar by sampling",xlab="xbar",col = "gold",border="white")
+#加上理論的部分
+curve(dnorm(x,theo.mean,theo.sd),add=T,col="navy",lwd=2)
+```
+```{r}
+#z-score
+simu.z=(simu.xbar-theo.mean)/theo.sd
+#distribution of z-score
+hist(simu.z,probability = T,breaks = 20,main="standardized sample distribution",xlab="standard xbar",col="blue",border = "white")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
