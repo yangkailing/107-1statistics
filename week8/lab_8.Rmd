@@ -1,0 +1,176 @@
+---
+title: "homework_8"
+author: "b06208016楊鎧綾"
+date: "November 2, 2018"
+output: html_document
+---
+
+##10.12
+###a
+<br/>confidence interval is between(0.47-0.03,0.47+0.03)=**(0.44,0.5)**<br/>
+
+###b
+```{r}
+prop.test(x=0.47*1100,n=1100,alternative = "two.sided",conf.level = 0.95)
+```
+<br/>the confidence interval by calculate is(0.4402099,0.5000021)<br/>
+<br/>此題的margion error 估計是以conservative 的方式(把計算標準誤的phat當作0.5)，因為0.47和0.5還算接近因此使用conservative的方式和精準地計算出來的信賴區間不會相差太多，不過還是會略大一點<br/>
+<br/>**the confidence interval under 95% is(0.44,0.50),which means 95% of the selected population would be in the interval , or the probability the population will be in the interval is 95%**<br/>
+
+##10.22
+###a
+<br/>the phat is **0.3**,which is the sample proportion that answered less strict<br/>
+
+###b
+```{r}
+se=sqrt(0.3*0.7/439);se
+```
+<br/>**the standard error is 0.02187144**<br/>
+
+
+###c
+####by calculate
+```{r}
+0.3+1.96*se
+0.3-1.96*se
+```
+
+####by code
+```{r}
+prop.test(x=0.3*439,n=439,alternative = "two.sided",conf.level = 0.95)
+```
+
+<br/>**the confidence by calculate is(0.257132,0.342868)<br/>and by code is(0.2579357,0.3456258)<br/>which are approximately the same**<br/>
+
+###d
+<br/>**the confidence interval for the population proportion means 95% of the selected population is between 25.7% and 34.3% , or the probability the population will be in the interval is 95%**<br/>
+
+##10.28
+###a
+```{r}
+prop.test(x=0.57*1006,n=1006,alternative = "two.sided",conf.level = 0.95)
+```
+<br/>**the confidence interval under 95% is(0.5386985,0.6007603)**<br/>
+
+###b
+<br/>**because the interval is all above 50%, so we can infer that in 2009 more than half of all Americans thought that abortions should be legal only under certain circumstances**<br/>
+
+###c
+```{r}
+prop.test(x=0.18*1006,n=1006,alternative = "two.sided",conf.level = 0.95)
+```
+<br/>**the confidence interval under 95% is(0.1570209,0.2054645)**<br/>
+
+##10.48
+###a
+```{r}
+1/sqrt(501)
+```
+
+```{r}
+Z=0.05*sqrt(501)/0.5
+Z
+pn=pnorm(Z, mean = 0, sd = 1)
+pn-(1-pn)
+```
+<br/>這一題若直接用信心水準95%(multiplier=2的狀況下)且phat來計算會得到margion error 為0.44而不是0.5，因此要去找他是在什麼信賴區間下假設phat為0.5來求得，由程式碼可知是在97.5的信賴區間下求取，不過後面幾小題是寫他是在信心水準95%下，因此後面還是將他當成是在信心水準95%下<br/>
+<br/>**the margion might calculate in the condition of phat=0.5 under 97.5% confidence level**<br/>
+
+###b
+<br/>**the confidence interval under 95% is(0.49,0.59),which means 95% of the selected population would be in the interval , or the probability the population will be in the interval is 95%**<br/>
+
+###c
+```{r}
+prop.test(x=0.54*501,n=501,alternative = "two.sided",conf.level = 0.95)
+```
+<br/>**the confidence interval under 95% is(0.4952216,0.5841558),which means 95% of the selected population would be in the interval , or the probability the population will be in the interval is 95%**<br/>
+
+###d
+<br/>**the confidence interval under 95% of given margin error is(0,0.1),which means 95% of the selected population would be in the interval , or the probability the population will be in the interval is 95%**<br/>
+```{r}
+prop.test(x=0.05*501,n=501,alternative = "two.sided",conf.level = 0.95)
+```
+<br/>**the confidence interval under 95% of compute is(0.03329286,0.07390659),which means 95% of the selected population would be in the interval , or the probability the population will be in the interval is 95%**<br/>
+
+###e
+<br/>**because the given margin error is in the condition of phat=0.5,the phat of d is 0.05 which is far from 0.5;and the phat of bc is 0.54 which is around 0.5.so the interval is more colsly in part b and c**<br/>
+
+##10.54
+###a
+```{r}
+prop.test(x=c(85,24),n=c(1105,1379),alternative = "two.sided",conf.level = 0.95)
+```
+<br/>**the confidence interval under 95% is (0.04154351,0.07749481)**<br/>
+
+###b
+<br/>**因為信賴區間沒有涵蓋0，所以nonsnorer 和snorer罹患心臟病是有差別的**<br/>
+
+##10.66
+###a
+<br/>**因為兩個信賴區間沒有交集，因此可以說男生和女生對於罹患此疾病的機率是有差別的**<br/>
+
+###b
+<br/>the mean of phat1 is (0.11+0.17)/2=0.14;<br/>the mean of phat2 is (0.04+0.08)/2=0.06<br/>
+```{r}
+prop.test(x=c(0.14*524,0.06*542),n=c(524,542),alternative = "two.sided",conf.level = 0.95)
+```
+<br/>**the confidence interval under 95% of the difference is(0.04231276,0.11768724)**<br/>
+
+###c
+<br/>**因為信賴區間沒有涵蓋0，而且都大於0，可以說男生和女生罹患此疾病是有差別的，而且男生更容易**<br/>
+
+##r studio
+```{r}
+Prop_CI = function(n1,n2,p1, p2, confd) {
+ 
+  all.phat = c()
+  for (i in 1:10000) {
+    phat1 = sum(sample(c(0,1), n1, replace = T, prob = c(1-p1,p1)))/n1
+    phat2 = sum(sample(c(0,1), n2, replace = T, prob = c(1-p2,p2)))/n2
+    phat_d=phat1-phat2
+    all.phat[i] = phat_d
+  }
+  
+  all.phat = sort(all.phat)
+  
+  low.per = ceiling(((1-confd)/2)*10000)
+  low.vlue = all.phat[low.per]
+  high.per = ceiling((1-((1-confd)/2))*10000)
+  high.vlue = all.phat[high.per]
+  
+  results = c(paste((1-confd)/2*100,"%"), paste((1-((1-confd)/2))*100,"%"), low.vlue, high.vlue)
+  
+  mean.p = mean(all.phat)
+  sd.p = sd(all.phat)
+  
+  CI = list(CI = matrix(results, nrow = 2, byrow = T), mean = mean.p, sd = sd.p, all.phat=all.phat)
+  
+  return(CI)
+}
+
+CI=Prop_CI(1467,1575,915/1467,771/1575,0.95)
+CI[1:3]
+
+
+# By calculation
+n1 = 1467
+n2=1575
+p1=915/1467
+p2 = 771/1575
+
+z = qnorm((1-0.95)/2, lower.tail = F)
+se = sqrt((p1*(1-p1)/n1)+(p2*(1-p2)/n2))
+
+high.c = p1-p2 + z*se; high.c
+low.c = p1-p2 - z*se; low.c
+```
+<br/>在95%信心水準下，模擬的信賴區間是如程式所示,理論的的信賴區間是(0.0992,0.1692),兩者差距不大<br/>
+```{R}
+#plot
+#draw sample distribution
+hist(CI[[4]],probability = T,breaks = 20,main="sample distribution of phat1-phat2 by sampling",xlab="phat1-phat2",col = "gold",border="white")
+#加上理論的部分
+curve(dnorm(x,p1-p2,se),add=T,col="navy",lwd=2)
+```
+
+
