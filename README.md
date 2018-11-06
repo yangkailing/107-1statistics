@@ -26,4 +26,4 @@ reading "A (very) short introduction to R.pdf" and creat a html about the essay<
 [第七周作業_population 推估 sample](https://yangkailing.github.io/107-1statistics/week7/homework_7.html)
 
 ## week8
-[第八周作業_類別資料的信賴區間估計](https://yangkailing.github.io/107-1statistics/week8/homework_8.html)
+[第八周作業_類別資料的信賴區間估計](https://yangkailing.github.io/107-1statistics/week8/lab_8.html)
