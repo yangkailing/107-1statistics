@@ -1,0 +1,135 @@
+---
+title: "week16"
+author: "b06208016楊鎧綾"
+date: "December 28, 2018"
+output: html_document
+---
+
+##16.8
+###a
+<br/>$H_0:$ no mattter what age it is the number of children couple average wants is the same
+<br/>$\mu_1=\mu_2=\mu_3=\mu_4$
+<br/>$H_a:$ the number of children couple wants is different according to age
+<br/>$\mu_1\neq\mu_2\neq\mu_3\neq\mu_4$ (at least one of them is different from others)
+<br/>$\mu$ means the ideal number of children a couple want, and the age range is  18~29, 30~44, 45~59, 60~89, respectively<br/>
+<br/>the sample is from US adults from age 18~89, so the population it can infer might be US adults from age 18~89, better not overestimate
+
+###b
+<br/> F-statistic: 7.41; p-value: 0
+<br/>under the confidence level of 95% $\alpha=0.05$, the p-value=0 is smaller than $\alpha$, so we can reject the null hypothesis, <br/>we can say that the number of children couple wants is different according to age
+
+###c
+<br/>從信賴區間我們可以看到18-29歲及60-89歲的信賴區間大量重疊，而30-44歲及45-59歲的也大量重疊，前兩組的信賴區間高於後兩組，而且他們並無重疊<br/><br/>我們可以說18-29歲及60-89歲是無差別的，30-44歲及45-59歲的也是無差別的，但是18-29歲及60-89歲想要的孩子較多，他們與30-44歲及45-59歲是有差別的
+
+###d
+```{r}
+0.8198*2>0.9903
+```
+<br/>the max standard deviation is smaller than two times of min sd, so it is reasonable to assume equal sd
+
+##16.24
+###a
+```{r}
+d1=c(7,2,5,6)
+d2=c(8,12,0,4)
+d3=c(16,9,5,10)
+x1=mean(d1)
+x2=mean(d2)
+x3=mean(d3)
+xbar=(x1+x2+x3)/3
+xbar;x1;x2;x3
+```
+<br/>xbar=7; x1=5; x2=6; x3=10
+
+###b
+```{r}
+ssg=length(d1)*(x1-xbar)^2+length(d2)*(x2-xbar)^2+length(d3)*(x3-xbar)^2
+ssg
+```
+<br/> SS Group = 56 
+
+###c
+```{r}
+all=c(d1,d2,d3)
+sst=0
+for (i in all){
+  sst=sst+((i-xbar)^2)
+}
+sst
+```
+<br/> SS Total=212
+
+###d
+```{r}
+sse=sst-ssg
+sse
+```
+<br/>SS Error = 156
+
+###e
+```{r}
+msg=ssg/(3-1)
+mse=sse/(length(all)-3)
+f_score=msg/mse;f_score
+```
+<br/>the f-statistic is 1.615, and the degree of freedom is 2 and 9
+
+##16.36
+###a
+<br/>男生坐越前面睡越少，坐越後面則睡越多，而且睡覺時數差異頗大
+
+###b
+<br/>女生坐越前面睡越多，坐越後面則睡越少，但睡覺時數差異不大
+
+###c
+<br/>因為兩條線沒有平行，所以可以說性別與座位有交互作用，所坐座位對於不同性別來說影響到平均睡眠時間程度不一
+
+##16.52
+###a
+```{r}
+load("wineratings.rdata")
+# data distribution
+boxplot(q ~ r, data = wineratings, 
+        main = "quality among regions", cex.main = 1.6)
+
+#install.packages("ggpubr")
+library(ggpubr)
+
+# visualize std for each group
+ggline(wineratings, x = "r", y = "q", add = c("mean_sd"), 
+       color = "firebrick3", main = "Std among groups",
+       ggtheme = theme_gray())
+```
+<br/>the data of region 3 is higher than other two, the quality of region 3 is different from the other two, and region 1 and two might be no difference
+
+###b
+```{r}
+# mean and sd for each group
+stu.mean = tapply(wineratings$q, wineratings$r, mean)
+stu.sd = tapply(wineratings$q, wineratings$r, sd)
+stu.n = tapply(wineratings$q, wineratings$r, length)
+
+stu = data.frame(n = stu.n, mean = stu.mean, sd = stu.sd)
+stu
+```
+<br/>the mean and sd is as the dataframe shows
+
+###c
+<br/>step.1 
+<br/>$H_0:$ there are no difference between regions, that is $\mu_1 = \mu_2 = \mu_3$
+<br/>$H_a:$ there are difference between regions, that is $\mu_1 \neq \mu_2 \neq \mu_3$(at least one of them is different from others)
+<br/>$\mu$ means the mean of the quality of a region 
+<br/>step.2 as the boxplot shows the data do not have outlier and extreme skewed, <br/>and the max sd is smaller than two times the min sd, we can calculate the f-value which is 27.52
+<br/>step.3 as the data shows the p-value is 6.59e-08
+```{r}
+oneway = aov(q ~ factor(r), data = wineratings)
+summary(oneway)
+```
+<br/>step.4 under 95% confidence level $\alpha=0.05$, the p-value is smaller than alpha, so we can reject $H_0$
+<br/>step.5 we can say that depend on different rejions the quallity of wine might be different
+
+
+
+
+
+

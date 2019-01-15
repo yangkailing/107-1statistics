@@ -1,0 +1,265 @@
+---
+title: "week_14"
+author: "b06208016楊鎧綾"
+date: "December 14, 2018"
+output: html_document
+---
+##14.16
+###a
+```{r}
+yhat=98.6-0.0138*21
+```
+<br/>the predicted body for 21 years old is**98.3102**
+
+###b
+```{r}
+98.3-98.3102
+98.4-98.3102
+```
+<br/> **the residual is -0.0102 and 0.0898**
+
+###c
+<br/>yhat+-T*0.7
+```{r}
+t=qt(0.025,df=98,lower.tail = F)
+yhat-t*0.7
+yhat+t*0.7
+```
+<br/> the interval is **(96.92,99.70)**
+
+###d
+<br/> **no, it is not unusual**, because 98.6 is in the interval
+
+##14.28
+###a
+<br/>**the slope is $b_1$** because it is the information getting from sample, and not inferred 
+
+###b
+```{r}
+t=qt(0.025,df=98,lower.tail = F)
+low=-0.0138-t*0.0042
+high=-0.0138+t*0.0042
+```
+<br/>**the interval is (-0.022,-0.005)**,which means under the confidence level of 95%,if we sample many times and regression the slope, it will have the  probability of 95% to be in the interval<br/>
+
+###c
+```{r}
+10*low
+10*high
+```
+<br/>**the interval is (-0.22,-0.054)**,which means under the confidence level of 95%,if we sample many times and regression the slope, it will have the  probability of 95% to be in the interval<br/>
+
+##14.36
+###a
+```{r}
+34.98+10.66*4
+```
+<br/> the yhat(fit) by this equation is **77.62**, which is the same as the table
+
+###b
+<br/>the CI on the table is **(76.670,78.571)**,which means under the confidence level of 95%, if we sample a lot of time as x=4 and calculate a mean, the mean would have the probability of 95% to be in the interval<br/>**E(y)的可能範圍**
+
+###c
+<br/>the PI on the table is **(64.307,90.934)**,which means under the confidence level of 95%,if we pick a y as x=4, it will have the  probability of 95% to be in the interval<br/>**y的可能範圍**
+
+###d
+<br/>**the prediction interval** might be better, because the tourist might want to know under the duration of last eruption, the interval the y might might contain, not the expected value, the range is too narrow, and they might want a conservative interval
+
+##14.54
+###a
+<br/>there are two way to write<br/>
+one is son's height=29.981+0.57568*father's height<br/>
+and the other is son's height=30+0.576*father's height<br/>
+
+###b
+<br/>calculate the t-value is b1/se(b1)=7.732438 is almost equal to 7.73 which is in the table
+```{r}
+t_score=0.57568/0.07445
+```
+
+###c
+<br/>step.1 <br/>$H_0: slope=0$ <br/>$H_a: slope \ne0$<br/>slope means the slope of regression line
+<br/>step.2 the sample is bigger than 30, which is big enough
+<br/>calculate the t-value is b1/se(b1)=7.732438 is almost equal to 7.73 which is in the table
+```{r}
+t_score=0.57568/0.07445
+```
+<br/>step.3 find the p-value is almost =0
+```{r}
+2*pt(t_score,df=71,lower.tail = F)
+```
+<br/>step.4 under 95% confidence level the alpha=0.05,**the p-value is smaller than alpha, so we can reject null hypothesis**
+<br/>step.5 so we can say that the slope is not equal to 0
+
+###d
+<br/>slope=0.57568;se(b1)=0.07445
+```{r}
+t=qt(0.025,df=71,lower.tail = F)
+0.57568-t*0.07445
+0.57568+t*0.07445
+```
+<br/>**the interval of beta1=(0.427,0.724)**,which means under the confidence level of 95%,if we sample many times and regression the slope, it will have the  probability of 95% to be in the interval<br/>
+
+##14.56
+###a
+```{r}
+30+0.576*65
+```
+<br/>**the predicted height is 67.44 by the equation and 67.4 by the result**
+
+###b
+<br/>**the PI is (64.946,75.612)**,which means under the confidence level of 95%,if we pick a y as x=70, it will have the  probability of 95% to be in the interval<br/>,also means 95% of population y might be in the interval,**y的可能範圍**
+
+###c
+<br/>**the CI is (71.596,73.566)**,which means under the confidence level of 95%, if we sample a lot of time as x=74 and calculate a mean, the mean would have the probability of 95% to be in the interval<br/>**E(y)的可能範圍**
+
+###d
+<br/>the PI is more wider because it is the interval of all possible, and the CI is the interval of mean y,<br/>if looking at their function the PI is wider because it contain s and CI didn't
+
+###e
+<br/>the plot has a outlier 
+<br/>如果是取樣合理的狀況下存在的離群值通常來說不可刪除，不過可將資料分段畫兩條回歸線降低誤差，若是取樣錯誤的就可直接刪除
+
+##r studio
+```{r}
+#data cleaning
+veh=read.csv("Vehicles.csv",sep=",",header=T)
+
+veh=veh[,c("Vehicle","GDP")]
+veh=na.omit(veh)
+
+Vehicle=veh$Vehicle
+GDP=veh$GDP
+
+#simple linear regression
+RESULTS=lm(Vehicle~GDP, data=veh)
+summary(RESULTS)
+```
+<br/>the regression equation is **$vehicle=1606000+305.5GDP$**,<br/>which means as GDP increase 1(10億),the vehicle would predicted to sold increase 0.03055
+
+###hypothesis test
+<br/>step.1<br/>$H_0:\beta_1 = 0$<br/>$H_a:\beta_1 \ne 0$<br/>$\beta_1$ means the slope of regression line of population which is infered from sample
+<br/>step.2  even though the sample is not big, it seems to be linear and donot have outlier
+```{r}
+plot(Vehicle~GDP,pch=16,cex=1,col="navy",
+     main="Vehicle vs GDP",xlab="GDP(1 billion)",ylab="Vehicle",cex.main=2,cex.lab=1.2)
+```
+<br/>calculate t-score is 29.89 (by the table above)
+<br/>step.3 the p-value is 2e-16(by the table above)
+<br/>step.4 under the confidence level of 95% , $\alpha=0.05$, the p-value is smaller than 0.05, so we can reject $H_0$
+<br/>step.5 we can say that $\beta_1$ is different from 0
+
+###confidence interval
+<br/>we knows estimated  $\beta_1=0.03055$; standard error of  $\beta_1=0.1022$(by the table above)
+;degree of freedom=26-2; and assume we want to know the confidence interval under the confidence level of 95%
+```{r}
+t=qt(0.025,df=24,lower.tail = F)
+0.03055-t*0.1022
+0.03055+t*0.1022
+```
+<br/>the confidence interval is (-0.18,0.24),,which means under the confidence level of 95%,if we sample many times and regression the slope, it will have the  probability of 95% to be in the interval<br/>
+
+###PI and CI
+<br/>the PI means under the confidence level of 95%,if we pick a y under x=specific, it will have the  probability of 95% to be in the interval<br/>,also means 95% of population y might be in the interval,**y的可能範圍**
+
+<br/>the CI means under the confidence level of 95%, if we sample a lot of time as x=specific and calculate a mean, the mean would have the probability of 95% to be in the interval<br/>**E(y)的可能範圍**
+
+```{r}
+#PI
+PI=predict(RESULTS,data.frame(GDP=c(9000,13000,17000)),interval="prediction",level=0.95);PI
+
+#CI
+CI=predict(RESULTS,data.frame(GDP=c(9000,13000,17000)),interval="confidence",level=0.95);CI
+
+#plotting
+fit=PI[,1]
+PI.low=PI[,2]
+PI.high=PI[,3]
+
+CI.low=CI[,2]
+CI.high=CI[,3]
+
+xx.test=c(9000,13000,17000)
+
+par(mfrow=c(1,2))#把畫布分開(列，欄)
+
+#plot PI
+
+plot(Vehicle~GDP,data=veh,pch=20,col="gray50",
+     main="Prediction interval",xlab="GDP",ylab="Vehicle",
+     xlim=c(5500,18000),ylim=c(2900000,7100000),cex.main=2,cex.lab=1.2)
+
+abline(RESULTS,col="navy")
+for(i in 1:length(xx.test)){
+  lines(c(xx.test[i],xx.test[i]),c(PI.low[i],PI.high[i]),col="red",lwd=3)
+  points(xx.test[i],PI.low[i],col="red",pch=15)
+  points(xx.test[i],PI.high[i],col="red",pch=15)
+  points(xx.test[i],fit[i],col="red",pch=8)
+}
+
+#plot CI
+plot(Vehicle~GDP,data=veh,pch=20,col="gray50",
+     main="Confidence interval",xlab="GDP",ylab="Vehicle",
+     xlim=c(5500,18000),ylim=c(2900000,7100000),cex.main=2,cex.lab=1.2)
+
+abline(RESULTS,col="navy")
+for(i in 1:length(xx.test)){
+  lines(c(xx.test[i],xx.test[i]),c(CI.low[i],CI.high[i]),col="red",lwd=3)
+  points(xx.test[i],CI.low[i],col="red",pch=15)
+  points(xx.test[i],CI.high[i],col="red",pch=15)
+  points(xx.test[i],fit[i],col="red",pch=8)
+}
+```
+
+###診斷
+```{r}
+#draw the scatter plot
+##y vs x
+plot(Vehicle~GDP,pch=16,cex=1,col="navy",
+     main="Vehicle vs GDP",xlab="GDP",ylab="Vehicle",cex.main=2,cex.lab=1.2)
+```
+<br/>by this plot we can see that it is linear, and do not have outlier
+```{R}
+#residuals vs x
+res=RESULTS$res
+plot(res~GDP,pch=16,cex=1,col="gold3",
+     main="residual vs GDP",xlab="GDP",ylab="residuals",
+     cex.main=2,cex.lab=1.2)
+
+abline(h=0,col="red")
+```
+<br/>by this plot we can see that the deviation is almostly the same, it do not change depend on explanatory variable
+```{R}
+#histogram of residuals
+par(mfrow=c(1,2))
+
+hist(res,breaks=20,border="white",col="olivedrab3",
+     main="histogram of residuals", xlab="residuals",
+     cex.main=2,cex.lab=1.2)
+
+#qqplot
+qqnorm(res,cex.main=2,cex.lab=1.2)
+qqline(res,col="red")
+
+```
+<br/>by the histogram we can se that it is almost normal distribution and do not have outlier or extreme skewed, so as the qq-plot
+<br/>and we assume that two variable are independent
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

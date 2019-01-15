@@ -1,0 +1,426 @@
+---
+title: "week15"
+author: "b06208016楊鎧綾"
+date: "December 21, 2018"
+output: html_document
+---
+
+##4.12
+###a
+<br/>derived every row value by every row total, then we can get the row percent which means depend on their sex what the answer they will answer, so the sex of a person is explanatory variable 
+
+###b
+```{r}
+right_p=c(87/129,64/83,151/212)
+over_p=c(39/129,3/83,42/212)
+under_p=c(3/129,16/83,19/212)
+total_p=c(1,1,1)
+p=data.frame(about_right=right_p,overweight=over_p,underweight=under_p,total=total_p,row.names = c("female","male","total"))
+p
+```
+
+###c
+```{r}
+pp=t(as.matrix(p))
+pp=pp[1:3,1:2]
+barplot(pp,col=c("red","blue","green"),main="comparison of gender",xlab = "gender",ylab="percentage",legend=rownames(pp),beside = T)
+```
+
+###d
+<br/>female are more likely to think themselves overweight, and male are more likely to think themselves underweight, even though most of people think themselves about right
+
+###e
+<br/>it is the data of a collage statistic class, the population it can infer is **collage students**, because it cannot overestimate other ages
+
+##4.26
+###data
+```{r}
+YES=c(42,30,72)
+NO=c(50,87,137)
+TOTAL=c(92,117,209)
+data.frame(YES,NO,TOTAL,row.names = c('short','tall','total'))
+```
+
+###a
+```{r}
+risk_s=42/92;risk_s
+risk_t=30/117;risk_t
+```
+<br/>the risk of short people being bullied is 0.46;and the risk for tall people is 0.26
+
+###b
+```{r}
+r_risk=risk_s/risk_t;r_risk
+```
+<br/>the relative risk for short student being bullied with the basedline is tall students being bullied is 1.78,<br/>which means short students is 1.78 times more likely to being bullied than tall students
+
+###c
+```{r}
+r_risk-1
+```
+<br/>the increased risk of having been bullied for short students is 0.78,<br/>which means compare to tall students the increase the risk of 0.78 to be bullied
+
+###d
+```{r}
+odd_s=42/50
+odd_t=30/87
+odd_ratio=odd_s/odd_t;odd_ratio
+```
+<br/>the odds ratio is 2.436;which means the odds of short students being bullied is 2.436 times than tall students
+
+##4.36
+###data
+```{r}
+survive=c(5,100,105)
+die=c(95,900,995)
+TOTAL=c(100,1000,1100)
+a=data.frame(survive,die,TOTAL,row.names = c('standard','new','total'))
+a
+```
+```{r}
+survive=c(500,95,595)
+die=c(500,5,505)
+TOTAL=c(1000,100,1100)
+b=data.frame(survive,die,TOTAL,row.names = c('standard','new','total'))
+b
+```
+###a
+```{r}
+a[1,1]/a[1,3]
+a[2,1]/a[2,3]
+```
+<br/>new treatment is more successful in hospital A, the survival of new treatment is 0.1 is higher than standard treatment which the survival rate is 0.05
+
+###b
+```{r}
+b[1,1]/b[1,3]
+b[2,1]/b[2,3]
+```
+<br/>new treatment is more successful in hospital B, the survival of new treatment is 0.95 is higher than standard treatment which the survival rate is 0.5
+
+###c
+```{r}
+c=a+b
+c
+c[1,1]/c[1,3]
+c[2,1]/c[2,3]
+```
+<br/>standard treatment is more successful in comparing two hospital, the survival of new treatment is 0.18 is higher than standard treatment which the survival rate is 0.46
+
+###d
+<br/>**because the sample size is different in two hospital**,<br/>the survival rate is lower in hospital A, even though it has higher survival rate in new treatment but its survival rate is really low, so it would pull down the survival rate of combine one, and hospital B would push up the survival rate of standard treatment
+
+##15.18
+###a
+<br/>step.1 <br/>$H_0:$ smoking or not have no relationship with separated or not <br/>$H_a:$ smoking and separated has relationship
+
+###b
+<br/>step.2 the sample is big enough, all of them are bigger than 1, and at least 80% of them bigger than 5
+```{r}
+separated=c(41,41,32,114)
+not=c(931,290,163,1384)
+TOTAL=c(972,331,195,1498)
+a=data.frame(separated,not,TOTAL,row.names = c('neither smoked','one smoked','both smoked','total'))
+a
+```
+
+<br/>calculate the chi-squared is 48.125
+```{r}
+exp_separated=c(972*114/1498,331*114/1498,195*114/1498)
+exp_not=c(972*1384/1498,331*1384/1498,195*1384/1498)
+exp=data.frame(exp_separated,exp_not,row.names = c("neither","one","both"))
+exp
+a=a[1:3,1:2];a
+chi=(a-exp)^2/exp;chi
+chi=sum(chi)
+chi
+```
+<br/>step.3 find the p-value is 3.545964e-11
+```{r}
+df=(3-1)*(2-1)
+p.value=1-pchisq(chi,df=df)
+p.value
+```
+<br/>step.4 under 95% confidence level the alpha=0.05,**the p-value is smaller than alpha, so we can reject null hypothesis**
+<br/>step.5 so we can say that smoking and separated has relationship
+
+##15.26
+###data
+```{r}
+always=c(964,924,1888)
+never=c(97,254,351)
+TOTAL=c(1061,1178,2239)
+a=data.frame(always,never,TOTAL,row.names = c('female','male','total'))
+a
+```
+###a
+<br/>step.1 <br/>$H_0:$ sex have no relationship with using seatbelt <br/>$H_a:$ sex have relationship with using seatbelt
+
+<br/>step.2 the sample is big enough, all of them are bigger than 1, and at least 80% of them bigger than 5,we calculate the chi-square
+```{r}
+chi.square=(a[3,3]*(a[1,1]*a[2,2]-a[1,2]*a[2,1])^2)/(a[1,3]*a[2,3]*a[3,1]*a[3,2])
+chi.square
+```
+
+###b
+<br/>step.3
+```{r}
+df=(2-1)*(2-1);df
+```
+<br/>the degree of freedom is 1
+
+###c
+```{r}
+p.value=1-pchisq(chi.square,df=df)
+p.value
+```
+<br/>the p-value is 6.661338e-16
+
+###d
+<br/>step.4 under the confidence level of 95% we get the $\alpha=0.05$ ,**the p-value is smaller than alpha, so we can reject null hypothesis**
+<br/>step.5 so we can say that sex and using seatbelt  has relationship
+
+##15.40
+
+###data
+```{r}
+groups=c("sliver","blue","green","total")
+times=c(59,25,27,111)
+expected=c((1/3)*111,(1/3)*111,(1/3)*111,111)
+a=data.frame(groups,times,expected)
+a
+```
+
+<br/>step.1 <br/>$H_0:$the probability is the same for picking all the colors<br/>$H_a:$ the probability is not the same for picking all the colors
+
+<br/>step.2 the sample is big enough, all of them are bigger than 1, and at least 80% of them bigger than 5,we calculate the chi-square is 19.67568
+```{r}
+c=a[1:3,2]
+exp=a[1:3,3]
+chi=((c-exp)^2)/exp
+chi=sum(chi)
+chi
+```
+
+<br/>step.3
+```{r}
+df=3-1;df
+```
+<br/>the degree of freedom is 2
+
+```{r}
+p.value=1-pchisq(chi,df=df)
+p.value
+```
+<br/>the p-value is 5.339263e-05
+
+
+<br/>step.4 under the confidence level of 95% we get the $\alpha=0.05$ ,**the p-value is smaller than alpha, so we can reject null hypothesis**
+<br/>step.5 so we can say that the probability is not the same for picking all the colors
+
+##r studio
+### HW1  Write a function for Chi-square test (2*2) 
+```{r}
+Heart_Table = read.table("heartatk.csv", header=TRUE, sep=",")
+MyTable = xtabs(~ SEX + DIED, data = Heart_Table) # generate a 2x2 table
+MyTable
+MyChiSq <- function(MyTable) {
+    # row total, column total, total
+    total.0 = sum(MyTable[,1])
+    total.1 = sum(MyTable[,2])
+    total.F = sum(MyTable[1,])
+    total.M = sum(MyTable[2,])
+    total = sum(MyTable)
+    
+    # generate an expected table
+    ExpTable = MyTable
+    ExpTable[1,1] = total.0*total.F / total
+    ExpTable[1,2] = total.1*total.F / total
+    ExpTable[2,1] = total.0*total.M / total
+    ExpTable[2,2] = total.1*total.M / total
+
+    # calculate chi-square statistic
+    chi.11 = ((MyTable[1,1] - ExpTable[1,1])^2) / ExpTable[1,1]
+    chi.12 = ((MyTable[1,2] - ExpTable[1,2])^2) / ExpTable[1,2]
+    chi.21 = ((MyTable[2,1] - ExpTable[2,1])^2) / ExpTable[2,1]
+    chi.22 = ((MyTable[2,2] - ExpTable[2,2])^2) / ExpTable[2,2]
+    chi.square = sum(chi.11, chi.12, chi.21, chi.22)
+    
+    # p-value
+    df = (nrow(MyTable)-1) * (ncol(MyTable)-1)
+    p.value = 1-pchisq(chi.square, df = df)
+    results=list(X.squared = chi.square, df = df, p.value = p.value)
+    return(results)
+
+}
+
+
+MyChiSq(MyTable)
+```
+
+### HW2
+<br/>step.1 <br/>$H_0:$the probability is binomial distribution<br/>$H_a:$ the probability is not binomial distribution
+
+<br/>step.2 check whether the sample is big enough, all of them are bigger than 1, and at least 80% of them bigger than 5,if true calculate the chi-square is 4.006
+```{r}
+x = c(0,1,2,3,4,5,6,7)
+
+#observed values
+obs = c(5,13,26,19,20,7,0,0)
+n = 90
+pp =(sum(x*obs))/(n*7)#下雨的機率
+
+#expected values
+exp = c()
+for (i in 1:length(obs)) {
+  exp[i] = dbinom(x[i],size=7,pp)* n
+}
+
+tbl = data.frame(x, obs, exp)
+
+#check conditions
+#combining 6,7,8 rows
+tbl.678 = tbl[6,] + tbl[7,] + tbl[8,] #add up 6,7,8 rows
+tbl = tbl[-c(6,7,8),] #remove 6,7,8 rows
+tbl = rbind(tbl, tbl.678) #add the combined row
+
+#calculate the chi-square statistic
+chi=(tbl$obs-tbl$exp)^2/tbl$exp
+x_square=sum(chi)
+x_square
+```
+<br/>step.3
+```{r}
+df = nrow(tbl)-1-1 #k-1-r r為推估的參數數
+df
+```
+<br/>the degree of freedom is 4
+```{r}
+p.value=1-pchisq(x_square,df=df)
+p.value
+```
+<br/>the p-value is 0.405
+
+<br/>step.4 under the confidence level of 95% we get the $\alpha=0.05$ ,**the p-value is bigger than alpha, so we cannot reject null hypothesis**
+
+```{r}
+alpha = 0.05
+if (p.value <= alpha) {
+  print("Reject H0.")
+} else {
+  print("Do not reject H0.")
+}
+```
+
+<br/>step.5 so we can say that the probability is binomial distribution
+
+### HW3
+<br/>step.1 <br/>$H_0:$the probability is normal distribution<br/>$H_a:$ the probability is not normal distribution
+
+<br/>step.2 check whether the sample is big enough, all of them are bigger than 1, and at least 80% of them bigger than 5,if true calculate the chi-square is 4.644882
+```{r}
+pm2.5 = c(18.8, 14.6, 14.0, 15.8, 12.4, 13.2, 16.1, 13.8, 16.2, 
+          16.1, 17.8, 18.7, 15.8, 13.3, 13.6, 16.4, 13.8, 16.6, 
+          15.3, 19.0, 18.4, 15.0, 18.8, 18.1, 17.3, 16.3, 17.5, 
+          18.1, 14.2, 18.0, 13.0, 13.3, 12.4, 16.6, 14.1, 20.6, 
+          16.8, 13.3, 18.2, 16.9)
+
+#defining thresholds to categorize continuous data
+mean = mean(pm2.5)
+sd = sd(pm2.5)
+n = length(pm2.5)
+
+thres = c(mean-3*sd, mean-2*sd, mean-sd, mean, mean+sd, mean+2*sd, mean+3*sd)
+
+#observed values (continuous --> discrete)
+obs = rep(0, length = 8)
+
+for (i in 1:length(pm2.5)) {
+  if (pm2.5[i] < thres[1]) {
+    obs[1]=obs[1]+1
+  } else if (thres[1]<pm2.5[i] & pm2.5[i] <thres[2]) {
+    obs[2]=obs[2]+1
+  } else if (thres[2]<pm2.5[i] & pm2.5[i]<thres[3]) {
+    obs[3]=obs[3]+1
+  }else if (thres[3]<pm2.5[i] & pm2.5[i]<thres[4]) {
+    obs[4]=obs[4]+1
+  }else if (thres[4]<pm2.5[i] & pm2.5[i]<thres[5]) {
+    obs[5]=obs[5]+1
+  }else if (thres[5]<pm2.5[i] & pm2.5[i]<thres[6]) {
+    obs[6]=obs[6]+1
+  }else if (thres[6]<pm2.5[i] & pm2.5[i]<thres[7]) {
+    obs[7]=obs[7]+1
+  }else {
+    obs[8]=obs[8]+1
+  }
+}
+
+
+#expected value
+
+cumu.p = c(pnorm(thres[1],mean=mean,sd=sd), 
+           pnorm(thres[2],mean=mean,sd=sd) - pnorm(thres[1],mean=mean,sd=sd),
+           pnorm(thres[3],mean=mean,sd=sd) - pnorm(thres[2],mean=mean,sd=sd),
+           pnorm(thres[4],mean=mean,sd=sd) - pnorm(thres[3],mean=mean,sd=sd),
+           pnorm(thres[5],mean=mean,sd=sd) - pnorm(thres[4],mean=mean,sd=sd),
+           pnorm(thres[6],mean=mean,sd=sd) - pnorm(thres[5],mean=mean,sd=sd),
+           pnorm(thres[7],mean=mean,sd=sd) - pnorm(thres[6],mean=mean,sd=sd),
+           1-pnorm(thres[7],mean=mean,sd=sd))
+exp = cumu.p * n
+
+#creat table
+tbl = data.frame(obs, exp)
+
+
+#check conditions
+tbl
+#combining 6,7,8 rows
+tbl.678 = tbl[6,] +tbl[7,] + tbl[8,] #add up 7,8 rows
+tbl = tbl[-c(6,7,8),] #remove 7,8 rows
+#combining 1,2,3 rows
+tbl.123 = tbl[1,] + tbl[2,] + tbl[3,] #add up 1,2,3 rows
+tbl = tbl[-c(1,2,3),] #remove 6,7,8 rows
+tbl = rbind(tbl.123,tbl, tbl.678) #add the combined row
+#add table name
+cate = c("< m-d", "m-d ~ m", "m ~ m+d", ">m+d")
+rownames(tbl) = cate
+tbl
+#calculate the chi-square statistic
+chi=(tbl$obs -tbl$exp)^2/tbl$exp
+x_square=sum(chi)
+x_square
+```
+
+<br/>step.3
+```{r}
+df = nrow(tbl)-1-2  # k-1-r
+df
+```
+<br/>the degree of freedom is 1
+```{r}
+p.value=1-pchisq(x_square,df=df)
+p.value
+```
+<br/>the p-value is 0.0311466
+
+<br/>step.4 under the confidence level of 95% we get the $\alpha=0.05$ ,**the p-value is smaller than alpha, so we can reject null hypothesis**
+
+```{r}
+alpha = 0.05
+if (p.value <= alpha) {
+  print("Reject H0.")
+} else {
+  print("Do not reject H0.")
+}
+```
+
+<br/>step.5 so we can say that the probability is not normal distribution
+
+
+
+
+
+
+
+
+

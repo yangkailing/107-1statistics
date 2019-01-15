@@ -108,7 +108,7 @@ curve(dnorm(x,mean,sd),lwd=2,main="sampling distribution of phat1-phat2",xlim=c(
 
 ```
 
-##e
+##e 
 ```{r}
 x=seq(-0.2,0.2,length.out=1000)
 y=dnorm(x,mean,sd)
@@ -126,6 +126,7 @@ polygon(region.x2, region.y2, col = "red")
 ```{r}
 z=(0-mean)/sd
 z
+pnorm(0,mean,sd)
 ```
 **根據查表為0.1736**
 
@@ -135,6 +136,7 @@ z
 xx = seq(0, 300, length.out = 1000)
 yy = dnorm(xx, mean = 80, sd = 50)
 plot(x = xx, y = yy, type = "l", main = "distribution of number of miles")
+
 ```
 
 ```{r}
@@ -260,24 +262,24 @@ mu1=4.5
 sigma1=1.5
 mu2=8
 sigma2=2
-mean=mu2-mu1;mean
+mean=0;mean
 sd=sqrt((sigma2^2/23)+(sigma1^2/25));sd
 ```
-**the sampling distribution of xbar2-xbar1 :mean=3.5,sd=0.5137247**
+**the sampling distribution of xbar2-xbar1 :mean=0,sd=0.5137247**
 
 
 ###c
 ```{r}
-curve(dnorm(x,mean,sd),lwd=2,main="sampling distribution of xbar2-xbar1",xlim=c(1.5,5.5),xlab="xbar2-xbar1",ylab="density")
+curve(dnorm(x,mean,sd),lwd=2,main="sampling distribution of xbar2-xbar1",xlim=c(-2,2),xlab="xbar2-xbar1",ylab="density")
 ```
 
 ###d
 ```{r}
 #z-score
-z=(3.6-3.5)/0.5137247
+z=(3.6-0)/0.5137247
 z
 ```
-**z=0.19代表距離平均數0.19個表準差,so it is reasonable(只要小於3個標準差就有可能發生)**
+**z=7代表距離平均數7個表準差,so it is not reasonable只要小於3個標準差才有可能發生)**
 
 ###e
 ```{r}

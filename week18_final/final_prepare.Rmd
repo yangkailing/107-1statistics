@@ -1,0 +1,599 @@
+---
+title: "final_prepare"
+author: "b06208016楊鎧綾"
+date: "January 8, 2019"
+output: html_document
+---
+#basic
+```{r}
+dev.off()   #清理畫圖區
+par(mfrow=c(1,2))  #分開畫圖區
+rm(list = ls()) #remove environment
+student=read.csv("Student.csv",sep=",",header=T) #read csv
+student=na.omit(student)#DELETE NA
+```
+
+#quantitive
+##scatter plot
+###one group+regression
+```{r}
+plot(PartyDays~StudyHrs,pch=16,cex=1,col="navy",main="PartyDays vs StudyHrs",xlab="Study_Hrs",ylab="Party_Days")
+abline(RESULTS,col="red")
+```
+
+###two groups
+```{r}
+height_m=c(71,70,74,67,65,72,68,74)
+height_f=c(60,66,65,66,67,63,69,63,61,65)
+parheight_m=c(64,64.5,72.5,64,63,69,67,69.5)
+parheight_f=c(63.5,67,65.5,69.5,67.5,65.5,70,63,63,67.5)
+```
+```{r}
+plot(x=c(64,74),type="n",xlim=c(64,74),main="parent_height vs height",ylab="height",xlab="parentheight")
+points(parheight_m,height_m,pch=16,col="blue")
+points(parheight_f,height_f,pch=16,col='red')
+legend("bottomright",c("male","female"),col=c("blue","red"),pch=c(16,16))
+
+```
+
+<br/>as the plot shows it **might be linear**,<br/>and it is positive direction,<br/>it's variation is big, because it is vary from average pattern,<br/>it **do not have outliers**,<br/>the difference of male and female is that **female is almost shorter than male even though their parents' height is the same**, but both of male and female have linear positive pattern
+
+##看相關係數
+```{r}
+cor.test(PartyDays,StudyHrs)
+```
+
+##simple linear regression
+```{r}
+RESULTS=lm(PartyDays~StudyHrs)
+summary(RESULTS)     #same as above
+
+coeff=RESULTS$coefficients
+
+res=RESULTS$residuals
+
+yhat=RESULTS$fitted.values #estimated y (yhat)
+
+```
+
+##anova#看SSR跟SSE
+```{r}
+anova(RESULTS)
+```
+
+##confidence interval 
+###y(given s____PI)
+<br/>yhat+-T*0.7
+```{r}
+n=100
+alpha=0.05
+yhat=7
+t=qt(alpha/2,df=n-2,lower.tail = F)
+yhat-t*0.7
+yhat+t*0.7
+```
+
+###b1
+```{r}
+n=100
+b1=-0.0138
+se_b1=0.0042
+alpha=0.05
+t=qt(alpha/2,df=n-2,lower.tail = F)
+low=b1-t*se_b1
+high=b1+t*se_b1
+low;high
+```
+<br/>the confidence interval is (-0.18,0.24),which means under the confidence level of 95%,if we sample many times and regression the slope, it will have the  probability of 95% to be in the interval<br/>
+
+###PI and CI
+<br/>the PI means under the confidence level of 95%,if we pick a y under x=specific, it will have the  probability of 95% to be in the interval<br/>,also means 95% of population y might be in the interval,**y的可能範圍**
+
+<br/>the CI means under the confidence level of 95%, if we sample a lot of time as x=specific and calculate a mean, the mean would have the probability of 95% to be in the interval<br/>**E(y)的可能範圍**
+
+```{r}
+#PI
+PI=predict(RESULTS,data.frame(GDP=c(9000,13000,17000)),interval="prediction",level=0.95);PI
+
+#CI
+CI=predict(RESULTS,data.frame(GDP=c(9000,13000,17000)),interval="confidence",level=0.95);CI
+
+#plotting
+fit=PI[,1]
+PI.low=PI[,2]
+PI.high=PI[,3]
+
+CI.low=CI[,2]
+CI.high=CI[,3]
+
+xx.test=c(9000,13000,17000)
+
+par(mfrow=c(1,2))#把畫布分開(列，欄)
+
+#plot PI
+
+plot(Vehicle~GDP,data=veh,pch=20,col="gray50",
+     main="Prediction interval",xlab="GDP",ylab="Vehicle",
+     xlim=c(5500,18000),ylim=c(2900000,7100000),cex.main=2,cex.lab=1.2)
+
+abline(RESULTS,col="navy")
+for(i in 1:length(xx.test)){
+  lines(c(xx.test[i],xx.test[i]),c(PI.low[i],PI.high[i]),col="red",lwd=3)
+  points(xx.test[i],PI.low[i],col="red",pch=15)
+  points(xx.test[i],PI.high[i],col="red",pch=15)
+  points(xx.test[i],fit[i],col="red",pch=8)
+}
+
+#plot CI
+plot(Vehicle~GDP,data=veh,pch=20,col="gray50",
+     main="Confidence interval",xlab="GDP",ylab="Vehicle",
+     xlim=c(5500,18000),ylim=c(2900000,7100000),cex.main=2,cex.lab=1.2)
+
+abline(RESULTS,col="navy")
+for(i in 1:length(xx.test)){
+  lines(c(xx.test[i],xx.test[i]),c(CI.low[i],CI.high[i]),col="red",lwd=3)
+  points(xx.test[i],CI.low[i],col="red",pch=15)
+  points(xx.test[i],CI.high[i],col="red",pch=15)
+  points(xx.test[i],fit[i],col="red",pch=8)
+}
+```
+
+##hypothesis test
+###診斷condition
+```{r}
+#draw the scatter plot
+##y vs x
+plot(Vehicle~GDP,pch=16,cex=1,col="navy",
+     main="Vehicle vs GDP",xlab="GDP",ylab="Vehicle",cex.main=2,cex.lab=1.2)
+```
+<br/>by this plot we can see that it is linear, and do not have outlier
+```{R}
+#residuals vs x
+res=RESULTS$res
+plot(res~GDP,pch=16,cex=1,col="gold3",
+     main="residual vs GDP",xlab="GDP",ylab="residuals",
+     cex.main=2,cex.lab=1.2)
+
+abline(h=0,col="red")
+```
+<br/>by this plot we can see that the deviation is almostly the same, it do not change depend on explanatory variable
+```{R}
+#histogram of residuals
+hist(res,breaks=20,border="white",col="olivedrab3",
+     main="histogram of residuals", xlab="residuals",
+     cex.main=2,cex.lab=1.2)
+```
+<br/>by the histogram we can se that it is almost normal distribution and do not have outlier or extreme skewed
+<br/>and we assume that two variable are independent
+
+###b1
+<br/>step.1<br/>$H_0:\beta_1 = 0$<br/>$H_a:\beta_1 \ne 0$<br/>$\beta_1$ means the slope of regression line of population which is infered from sample
+
+<br/>step.2  even though the sample is not big, it seems to be linear and donot have outlier,for all x the sd is the same, and the distribution of y is normal distribution, and observation are independent,so we continue the hypothesis test
+```{r}
+plot(Vehicle~GDP,pch=16,cex=1,col="navy",
+     main="Vehicle vs GDP",xlab="GDP(1 billion)",ylab="Vehicle",cex.main=2,cex.lab=1.2)
+```
+```{r}
+#simple linear regression
+RESULTS=lm(Vehicle~GDP, data=veh)
+summary(RESULTS)
+```
+<br/>calculate t-score is 29.89 (by the table above)
+<br/>step.3 the p-value is 2e-16(by the table above)
+<br/>step.4 under the confidence level of 95% , $\alpha=0.05$, the p-value is smaller than 0.05, so we can reject $H_0$
+<br/>step.5 we can say that $\beta_1$ is different from 0
+
+#category and category
+##table
+```{r}
+data=c(4298,767,7136,643)
+mttable=as.table(matrix(data,byrow=T,ncol=2))
+rownames(mttable) = c("before", "after")
+colnames(mttable) = c("hit", "miss")
+mttable
+```
+
+##dataframe
+```{r}
+right_p=c(87/129,64/83,151/212)
+over_p=c(39/129,3/83,42/212)
+under_p=c(3/129,16/83,19/212)
+total_p=c(1,1,1)
+p=data.frame(about_right=right_p,overweight=over_p,underweight=under_p,total=total_p,row.names = c("female","male","total"))
+p
+```
+
+##bar graph 
+```{r}
+pp=t(as.matrix(p))
+pp=pp[1:3,1:2]
+barplot(pp,col=c("red","blue","green"),main="comparison of gender",xlab = "gender",ylab="percentage",legend=rownames(pp),beside = T)
+```
+
+##risk and odds
+```{r}
+risk_s=42/92;risk_s
+risk_t=30/117;risk_t
+```
+<br/>the risk of short people being bullied is 0.46;and the risk for tall people is 0.26
+```{r}
+r_risk=risk_s/risk_t;r_risk
+```
+<br/>the relative risk for short student being bullied with the basedline is tall students being bullied is 1.78,<br/>which means short students is 1.78 times more likely to being bullied than tall students
+```{r}
+r_risk-1
+```
+<br/>the increased risk of having been bullied for short students is 0.78,<br/>which means compare to tall students the increase the risk of 0.78 to be bullied
+```{r}
+odd_s=42/50
+odd_t=30/87
+odd_ratio=odd_s/odd_t;odd_ratio
+```
+<br/>the odds ratio is 2.436;which means the odds of short students being bullied is 2.436 times than tall students
+
+##chi-square by function
+```{r}
+#independent
+RESULTS = chisq.test(MyTable, correct = F) 
+RESULTS
+#goodness of fit(equal)
+chisq.test(tbl$obs, p = rep(0.1,length = 10), correct = F)
+
+# expected table
+exp.table = RESULTS$expected
+exp.table
+```
+
+##hypothesis of chi-squared
+###m*n
+<br/>step.1 <br/>$H_0:$ smoking or not have no relationship with separated or not <br/>$p_1= p_2= p_3$
+<br/>$H_a:$ smoking and separated has relationship<br/>$p_1 \neq p_2 \neq p_3$
+<br/>p means the separated percentage of each group (the risk of separate)
+
+<br/>step.2 the sample is big enough, all of them are bigger than 1, and at least 80% of them bigger than 5
+```{r}
+separated=c(41,41,32,114)
+not=c(931,290,163,1384)
+TOTAL=c(972,331,195,1498)
+a=data.frame(separated,not,TOTAL,row.names = c('neither smoked','one smoked','both smoked','total'))
+a
+```
+
+<br/>calculate the chi-squared is 48.125
+```{r}
+exp_separated=c((a[1,3]*a[4,1]/a[4,3]),(a[2,3]*a[4,1]/a[4,3]),(a[3,3]*a[4,1]/a[4,3]))
+exp_not=c((a[1,3]*a[4,2]/a[4,3]),(a[2,3]*a[4,2]/a[4,3]),(a[3,3]*a[4,2]/a[4,3]))
+exp=data.frame(exp_separated,exp_not,row.names = c("neither","one", "both" ))
+exp
+a=a[1:3,1:2];a
+chi=(a-exp)^2/exp;chi
+chi=sum(chi)
+chi
+```
+<br/>step.3 find the p-value is 3.545964e-11
+```{r}
+nrow=3
+ncol=2
+df=(nrow-1)*(ncol-1)
+p.value=1-pchisq(chi,df=df)
+p.value
+```
+<br/>step.4 under 95% confidence level the alpha=0.05,**the p-value is smaller than alpha, so we can reject null hypothesis**
+<br/>step.5 so we can say that smoking and separated has relationship
+
+###2*2
+```{r}
+always=c(964,924,1888)
+never=c(97,254,351)
+TOTAL=c(1061,1178,2239)
+a=data.frame(always,never,TOTAL,row.names = c('female','male','total'))
+a
+```
+<br/>step.1 <br/>$H_0:$ smoking or not have no relationship with separated or not <br/>$p_1= p_2= p_3$
+<br/>$H_a:$ smoking and separated has relationship<br/>$p_1 \neq p_2 \neq p_3$
+<br/>p means the separated percentage of each group (the risk of separate)
+
+<br/>step.2 the sample is big enough, all of them are bigger than 1, and at least 80% of them bigger than 5,we calculate the chi-square
+```{r}
+chi.square=(a[3,3]*(a[1,1]*a[2,2]-a[1,2]*a[2,1])^2)/(a[1,3]*a[2,3]*a[3,1]*a[3,2])
+chi.square
+```
+<br/>step.3<br/>the degree of freedom is 1<br/>the p-value is 6.661338e-16
+```{r}
+df=(2-1)*(2-1);df
+p.value=1-pchisq(chi.square,df=df)
+p.value
+```
+<br/>step.4 under the confidence level of 95% we get the $\alpha=0.05$ ,**the p-value is smaller than alpha, so we can reject null hypothesis**
+<br/>step.5 so we can say that sex and using seatbelt  has relationship
+
+###GOF (equal)
+```{r}
+groups=c("sliver","blue","green","total")
+times=c(59,25,27,111)
+expected=c((1/3)*111,(1/3)*111,(1/3)*111,111)
+a=data.frame(groups,times,expected)
+a
+```
+<br/>step.1 <br/>$H_0:$ smoking or not have no relationship with separated or not <br/>$p_1= p_2= p_3$
+<br/>$H_a:$ smoking and separated has relationship<br/>$p_1 \neq p_2 \neq p_3$
+<br/>p means the separated percentage of each group (the risk of separate)
+
+<br/>step.2 the sample is big enough, all of them are bigger than 1, and at least 80% of them bigger than 5,we calculate the chi-square is 19.67568
+```{r}
+c=a[1:3,2]
+exp=a[1:3,3]
+chi=((c-exp)^2)/exp
+chi=sum(chi)
+chi
+```
+
+<br/>step.3<br/>the degree of freedom is 2<br/>the p-value is 5.339263e-05
+```{r}
+k=3
+df=k-1;df
+p.value=1-pchisq(chi,df=df)
+p.value
+```
+
+<br/>step.4 under the confidence level of 95% we get the $\alpha=0.05$ ,**the p-value is smaller than alpha, so we can reject null hypothesis**
+<br/>step.5 so we can say that the probability is not the same for picking all the colors
+
+
+###GOF (binomal)
+<br/>step.1 <br/>$H_0:$the probability is binomial distribution<br/>$H_a:$ the probability is not binomial distribution
+
+<br/>step.2 check whether the sample is big enough, all of them are bigger than 1, and at least 80% of them bigger than 5,if true calculate the chi-square is 4.006
+```{r}
+x = c(0,1,2,3,4,5,6,7)
+
+#observed values
+obs = c(5,13,26,19,20,7,0,0)
+n = 90
+pp =(sum(x*obs))/(n*7)#下雨的機率
+
+#expected values
+exp = c()
+for (i in 1:length(obs)) {
+  exp[i] = dbinom(x[i],size=7,pp)* n
+}
+
+tbl = data.frame(x, obs, exp)
+
+#check conditions
+#combining 6,7,8 rows
+tbl.678 = tbl[6,] + tbl[7,] + tbl[8,] #add up 6,7,8 rows
+tbl = tbl[-c(6,7,8),] #remove 6,7,8 rows
+tbl = rbind(tbl, tbl.678) #add the combined row
+
+#calculate the chi-square statistic
+chi=(tbl$obs-tbl$exp)^2/tbl$exp
+x_square=sum(chi)
+x_square
+```
+<br/>step.3
+```{r}
+df = nrow(tbl)-1-1 #k-1-r r為推估的參數數(pp)
+df
+```
+<br/>the degree of freedom is 4
+```{r}
+p.value=1-pchisq(x_square,df=df)
+p.value
+```
+<br/>the p-value is 0.405
+
+<br/>step.4 under the confidence level of 95% we get the $\alpha=0.05$ ,**the p-value is bigger than alpha, so we cannot reject null hypothesis**
+
+```{r}
+alpha = 0.05
+if (p.value <= alpha) {
+  print("Reject H0.")
+} else {
+  print("Do not reject H0.")
+}
+```
+
+<br/>step.5 so we can say that the probability is binomial distribution
+
+###GOF (normal)
+<br/>step.1 <br/>$H_0:$the probability is normal distribution<br/>$H_a:$ the probability is not normal distribution
+
+<br/>step.2 check whether the sample is big enough, all of them are bigger than 1, and at least 80% of them bigger than 5,if true calculate the chi-square is 4.644882
+```{r}
+pm2.5 = c(18.8, 14.6, 14.0, 15.8, 12.4, 13.2, 16.1, 13.8, 16.2, 
+          16.1, 17.8, 18.7, 15.8, 13.3, 13.6, 16.4, 13.8, 16.6, 
+          15.3, 19.0, 18.4, 15.0, 18.8, 18.1, 17.3, 16.3, 17.5, 
+          18.1, 14.2, 18.0, 13.0, 13.3, 12.4, 16.6, 14.1, 20.6, 
+          16.8, 13.3, 18.2, 16.9)
+
+#defining thresholds to categorize continuous data
+mean = mean(pm2.5)
+sd = sd(pm2.5)
+n = length(pm2.5)
+
+thres = c(mean-3*sd, mean-2*sd, mean-sd, mean, mean+sd, mean+2*sd, mean+3*sd)
+
+#observed values (continuous --> discrete)
+obs = rep(0, length = 8)
+
+for (i in 1:length(pm2.5)) {
+  if (pm2.5[i] < thres[1]) {
+    obs[1]=obs[1]+1
+  } else if (thres[1]<pm2.5[i] & pm2.5[i] <thres[2]) {
+    obs[2]=obs[2]+1
+  } else if (thres[2]<pm2.5[i] & pm2.5[i]<thres[3]) {
+    obs[3]=obs[3]+1
+  }else if (thres[3]<pm2.5[i] & pm2.5[i]<thres[4]) {
+    obs[4]=obs[4]+1
+  }else if (thres[4]<pm2.5[i] & pm2.5[i]<thres[5]) {
+    obs[5]=obs[5]+1
+  }else if (thres[5]<pm2.5[i] & pm2.5[i]<thres[6]) {
+    obs[6]=obs[6]+1
+  }else if (thres[6]<pm2.5[i] & pm2.5[i]<thres[7]) {
+    obs[7]=obs[7]+1
+  }else {
+    obs[8]=obs[8]+1
+  }
+}
+
+
+#expected value
+
+cumu.p = c(pnorm(thres[1],mean=mean,sd=sd), 
+           pnorm(thres[2],mean=mean,sd=sd) - pnorm(thres[1],mean=mean,sd=sd),
+           pnorm(thres[3],mean=mean,sd=sd) - pnorm(thres[2],mean=mean,sd=sd),
+           pnorm(thres[4],mean=mean,sd=sd) - pnorm(thres[3],mean=mean,sd=sd),
+           pnorm(thres[5],mean=mean,sd=sd) - pnorm(thres[4],mean=mean,sd=sd),
+           pnorm(thres[6],mean=mean,sd=sd) - pnorm(thres[5],mean=mean,sd=sd),
+           pnorm(thres[7],mean=mean,sd=sd) - pnorm(thres[6],mean=mean,sd=sd),
+           1-pnorm(thres[7],mean=mean,sd=sd))
+exp = cumu.p * n
+
+#creat table
+tbl = data.frame(obs, exp)
+
+
+#check conditions
+tbl
+#combining 6,7,8 rows
+tbl.678 = tbl[6,] +tbl[7,] + tbl[8,] #add up 7,8 rows
+tbl = tbl[-c(6,7,8),] #remove 7,8 rows
+#combining 1,2,3 rows
+tbl.123 = tbl[1,] + tbl[2,] + tbl[3,] #add up 1,2,3 rows
+tbl = tbl[-c(1,2,3),] #remove 6,7,8 rows
+tbl = rbind(tbl.123,tbl, tbl.678) #add the combined row
+#add table name
+cate = c("< m-d", "m-d ~ m", "m ~ m+d", ">m+d")
+rownames(tbl) = cate
+tbl
+#calculate the chi-square statistic
+chi=(tbl$obs -tbl$exp)^2/tbl$exp
+x_square=sum(chi)
+x_square
+```
+
+<br/>step.3
+```{r}
+df = nrow(tbl)-1-2  # k-1-r(mean and sd, so r=2)
+df
+```
+<br/>the degree of freedom is 1
+```{r}
+p.value=1-pchisq(x_square,df=df)
+p.value
+```
+<br/>the p-value is 0.0311466
+
+<br/>step.4 under the confidence level of 95% we get the $\alpha=0.05$ ,**the p-value is smaller than alpha, so we can reject null hypothesis**
+
+```{r}
+alpha = 0.05
+if (p.value <= alpha) {
+  print("Reject H0.")
+} else {
+  print("Do not reject H0.")
+}
+```
+
+<br/>step.5 so we can say that the probability is not normal distribution
+
+
+
+#category and quantitive
+##f-score
+```{r}
+d1=c(7,2,5,6)
+d2=c(8,12,0,4)
+d3=c(16,9,5,10)
+x1=mean(d1)
+x2=mean(d2)
+x3=mean(d3)
+xbar=(x1+x2+x3)/3
+xbar;x1;x2;x3
+```
+<br/>xbar=7; x1=5; x2=6; x3=10
+
+```{r}
+ssg=length(d1)*(x1-xbar)^2+length(d2)*(x2-xbar)^2+length(d3)*(x3-xbar)^2
+ssg
+```
+<br/> SS Group = 56 
+
+```{r}
+all=c(d1,d2,d3)
+sst=0
+for (i in all){
+  sst=sst+((i-xbar)^2)
+}
+sst
+```
+<br/> SS Total=212
+
+```{r}
+sse=sst-ssg
+sse
+```
+<br/>SS Error = 156
+
+```{r}
+msg=ssg/(3-1)
+mse=sse/(length(all)-3)
+f_score=msg/mse;f_score
+```
+<br/>the f-statistic is 1.615, and the degree of freedom is 2 and 9
+
+##hypothesis
+
+<br/>$H_0:$ no mattter what age it is the number of children couple average wants is the same
+<br/>$\mu_1=\mu_2=\mu_3=\mu_4$
+<br/>$H_a:$ the number of children couple wants is different according to age
+<br/>$\mu_1\neq\mu_2\neq\mu_3\neq\mu_4$ (at least one of them is different from others)
+<br/>$\mu$ means the ideal number of children a couple want, and the age range is  18~29, 30~44, 45~59, 60~89, respectively<br/>
+<br/>the sample is from US adults from age 18~89, so the population it can infer might be US adults from age 18~89, better not overestimate
+
+###ONE-WAY ANOVA
+<br/>step.1 
+<br/>$H_0:$ there are no difference between regions, that is $\mu_1 = \mu_2 = \mu_3$
+<br/>$H_a:$ there are difference between regions, that is $\mu_1 \neq \mu_2 \neq \mu_3$(at least one of them is different from others)
+<br/>$\mu$ means the mean of the quality of a region 
+
+<br/>step.2 as the boxplot shows the data do not have outlier and extreme skewed, <br/>and the max sd is smaller than two times the min sd, we can calculate the f-value which is 27.52
+```{r}
+load("wineratings.rdata")
+# data distribution
+boxplot(q ~ r, data = wineratings, 
+        main = "quality among regions", cex.main = 1.6)
+
+#install.packages("ggpubr")
+library(ggpubr)
+
+# visualize std for each group
+ggline(wineratings, x = "r", y = "q", add = c("mean_sd"), 
+       color = "firebrick3", main = "Std among groups",
+       ggtheme = theme_gray())
+```
+
+<br/>step.3 as the data shows the p-value is 6.59e-08
+```{r}
+oneway = aov(q ~ factor(r), data = wineratings)
+summary(oneway)
+```
+<br/>step.4 under 95% confidence level $\alpha=0.05$, the p-value is smaller than alpha, so we can reject $H_0$
+<br/>step.5 we can say that depend on different rejions the quallity of wine might be different
+
+###TWO-WAY
+```{r}
+twoway = aov(GPA ~ Sex + ReligImp + Sex:ReligImp, data = student)
+summary(twoway)
+```
+
+
+
+
+
+
+
+
+

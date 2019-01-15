@@ -1,0 +1,282 @@
+---
+title: "midexam_2"
+author: "b06208016楊鎧綾"
+date: "November 28, 2018"
+output: html_document
+---
+
+##1
+###1-1
+####(1)
+```{r}
+mu=60;sigma=6;n=36
+mean=mu;mean
+sd=sigma/sqrt(n);sd
+```
+<br/>**the sampling distribution is: mean=60, standard deviation=1**
+
+####(2)
+```{r}
+z=qt((1-0.95)/2, df = 35, lower.tail = FALSE)
+A=mean-z*sd;A
+B=mean+z*sd;B
+```
+<br/>**A is 57.97, B is 62.03**,which has 95% the mean of speed will between it
+
+####(3)
+<br/>**the result is not consistent with  the belief**, because it is not in the interval calculate in part(2), which means it is out of mean for 2 standard deviation that contain 95% of sampling
+
+###1-2
+####(1)
+```{r}
+prop.test(x=c(0.611*131,0.426*61),n=c(131,61),alternative = "two.sided",conf.level = 0.99)
+```
+<br/>**the confidence interval is(-0.024,0.394)**
+
+####(2)
+```{r}
+prop.test(x=c(0.611*131,0.426*61),n=c(131,61),alternative = "two.sided",conf.level = 0.95)
+```
+<br/>**the confidence interval is narrower in 95% confidence level**,<br/>because lower confidence level reduce the abs(z-score),which means the **margion of error will reduce** and narrow the interval
+
+####(3)
+<br/>**yes it contains 0**,<br/>**contains 0 means it may be no difference between woman and man on dating someone not attractive under 99%confidence level**
+
+##2
+###(1)
+<br/>step.1<br/>null hypothesis:使用BRT-B的比例沒有比較高
+<br/>alternative hypothesis:使用BRT-B的比例有比較高
+<br/>$H_0$:p=0.2
+<br/>$H_a$:p > 0.2
+<br/>p 代表沿線居民使用BRT-B的比例
+
+<br/>step.2 the sample is random selected and is big enough，so calculate the z-score is 1.77
+```{r}
+sd=sqrt((0.2*0.8)/200)
+z=(0.25-0.20)/sd
+z
+```
+<br/>step.3 the p-value is 0.039
+```{r}
+pnorm(z, lower.tail = FALSE)
+```
+```{r}
+prop.test(x = 50, n = 200, 
+          p = 0.2, alternative = "greater", 
+          conf.level = 0.95, correct = F)
+```
+
+
+<br/>step.4 the p-value is smaller than $\alpha=0.05$,so it is statically significant evidence to conclude that **null hypothesis is wrong**，we can reject the null value
+ <br/>step.5 so we can say that 使用BRT-B的比例有比較高, **交通局不應該建議縣長終止BRT-B的服務**
+ 
+###(2)
+<br/>step.1 <br/>null hypothesis:使用BRT-O 的比例沒有高過BRT-B
+<br/>alternative hypothesis:使用BRT-O 的比例高過BRT-B
+<br/>$H_0$:p1-p2=0
+<br/>$H_a$:p1-p2 > 0
+<br/>p1-p2 means the difference proportion of the use of BRT-O and BRT-B
+<br/>step.2 the sample is random selected and is big enough，so calculate the z-score which is 1.12
+```{r}
+p1=60/200;n1=200
+p2=50/200;n2=200
+phat=(n1*p1+n2*p2)/(n1+n2)
+z=(p1-p2-0)/sqrt(phat*(1-phat)*((1/n1)+(1/n2)))
+z
+```
+<br/>step.3 the p-value is 0.13
+```{r}
+pnorm(z, lower.tail = FALSE)
+```
+
+```{r}
+prop.test(x = c(60, 50), n = c(200,200), 
+          alternative = "greater", 
+          conf.level = 0.95, correct = F)
+```
+
+<br/>step.4 the p-value is larger than 0.05,so it is not statically significant evidence to conclude null hypothesis is wrong，we cannot reject the null value
+
+<br/>step.5 so we can say that 使用BRT-O 的比例沒有高過BRT-B,兩者幾乎無差別,**交通局不應該建議縣長實現BRT-O的服務**
+
+###(3)
+<br/>因為$\alpha=0.05$,而此題為單尾檢定所以如果要計算信賴區間，他的信心水準是90%
+```{r}
+brt_b=prop.test(x=50,n=200,alternative = "two.sided",conf.level = 0.90)
+brt_b$conf.int
+brt_o=prop.test(x=60,n=200,alternative = "two.sided",conf.level = 0.90)
+brt_o$conf.int
+```
+
+
+```{r}
+plot(c(0,3),type='n',xlim=c(0.1,0.4),xlab='proportion of using',ylab='',axes=F,
+     main='Comparsion of the two confidence interval')
+
+lines(c(0.2008983,0.3061036),c(2,2))
+text(0.18,2,labels='brt_b')
+lines(c(0.2008983,0.2008983),c(1.95,2.05))
+lines(c(0.3061036,0.3061036),c(1.95,2.05))
+lines(c(0.25,0.25),c(1.95,2.05))
+
+lines(c(0.2473182,0.3582691),c(1,1))
+text(0.23,1,labels='brt_o')
+lines(c(0.2473182,0.2473182),c(0.95,1.05))
+lines(c(0.3582691,0.3582691),c(0.95,1.05))
+lines(c(0.3,0.3),c(0.95,1.05))
+
+axis(1)
+```
+<br/>**兩者的信賴區間大量重疊，因此可能是無差別的，與第2小題假說檢定的結果一致，BRT_O的預計使用率並沒有比較高**
+
+##3
+###(1)
+<br/>step.1 <br/>null hypothesis:使用大眾運輸的通勤時間沒有較長
+<br/>alternative hypothesis:使用大眾運輸的通勤時間較長
+<br/>$H_0:\mu_1-\mu_2=0$
+<br/>$H_a:\mu_1-\mu_2 > 0$
+<br/>$\mu_1$ 代表使用大眾運輸的通勤時間;$\mu_2$ 代表開車的通勤時間
+<br/>step.2 the sample size is big enough to continue hypothesis test, the t-score=2.236(unpooled,unpooled is better all the time)
+```{r}
+se=sqrt((20^2/100)+(10^2/100))
+t_score=((35-30)-0)/se;t_score
+```
+<br/>step.3 the p-value=0.013;df是取n1-1與n2-1較小者
+```{r}
+pt(t_score,df=99,lower.tail = F)
+```
+
+<br/>step.4 set alpha=0.05,the p-value is smaller than alpha, so we can reject null hypothesis
+<br/>step.5 we can say that 使用大眾運輸的通勤時間較長
+<br/>**交通局可說在台北使用大眾運輸的通勤時間較長**
+
+###(2)
+<br/>step.1 <br/>null hypothesis:使用大眾運輸的通勤時間沒有變短
+<br/>alternative hypothesis:使用大眾運輸的通勤時間有變短
+<br/>$H_0:\mu_d=0$
+<br/>$H_a:\mu_d < 0$
+<br/>$\mu_d$ 代表計畫完成前後使用大眾運輸的通勤時間差
+<br/>step.2 the sample size is big enough to continue hypothesis test, the t-score=-2
+```{r}
+mud=-1
+s=5
+t_score=(-1-0)/(5/sqrt(100));t_score
+```
+<br/>step.3 the p-value=0.024
+```{r}
+pt(t_score,df=99)
+```
+<br/>step.4 set alpha=0.05,the p-value is smaller than alpha, so we can reject null hypothesis
+<br/>step.5 we can say that 使用大眾運輸的通勤時間有變短
+<br/>**交通局可說計畫減少了在台北使用大眾運輸的通勤時間**
+
+###(3)
+####由顯著水準
+<br/>step.1 <br/>null hypothesis:計畫後使用大眾運輸的通勤時間與開車的時間無差異
+<br/>alternative hypothesis:計畫後使用大眾運輸的通勤時間與開車的時間有差異
+<br/>$H_0:\mu_3-\mu_2=0$
+<br/>$H_a:\mu_3-\mu_2 \neq 0$
+<br/>$\mu_3$ 代表計畫完成後使用大眾運輸的通勤時間;$\mu_2$ 代表開車的通勤時間
+<br/>step.2 the sample size is big enough to continue hypothesis test, the t-score=1.77(unpooled)
+```{r}
+se=sqrt((10^2/100)+(10^2/100))
+t_score=((32.5-30)-0)/se;t_score
+```
+<br/>step.3 the p-value=0.080
+```{r}
+2*pt(t_score,df=99,lower.tail = F)
+```
+<br/>step.4 set alpha=0.05,**the p-value is LARGER than alpha, so we cannot reject null hypothesis**
+<br/>step.5 we can say that 計畫後使用大眾運輸的通勤時間與開車的時間無差異
+<br/>**交通局可說計畫使使用大眾運輸的通勤時間與開車的時間無差異**
+
+####由效應值
+```{r}
+se=sqrt((10^2/100)+(10^2/100))
+t_score=((32.5-30)-0)/se
+dhat=t_score*sqrt((1/100+1/100))
+dhat
+```
+<br/>**由於dhat=0.25最接近0.2,可以說幾乎看不出差別(effect size is small),交通局可說計畫使使用大眾運輸的通勤時間與開車的時間無差異**
+
+##4
+###(1)
+####資料準備
+```{r}
+data<-read.csv("pennstate2.csv")
+```
+```{r}
+str(data)
+str(data[data$t=="Y",])
+```
+
+####hypothesis test
+<br/>step.1 <br/>null hypothesis:沒有超過20%的同學運動量達標
+<br/>alternative hypothesis:有超過20%的同學運動量達標
+<br/>$H_0$:p=0.2
+<br/>$H_a$:p > 0.2
+<br/>p means the proportion of the students that exercise good
+<br/>step.2 the sample is random selected and is big enough，so calculate the z-score which is -1.75
+```{r}
+phat=31/205;n=205
+z=(phat-0.2)/sqrt(0.2*0.8/n)
+z
+```
+<br/>step.3 the p-value is 0.9596
+```{r}
+pnorm(z,lower.tail = F)
+```
+
+```{r}
+prop.test(x = 31, n = 205, 
+          p = 0.2, alternative = "greater", 
+          conf.level = 0.95, correct = F)
+```
+
+<br/>step.4 the p-value is larger than 0.05,so it is not statically significant evidence to conclude null hypothesis is wrong，we cannot reject the null value
+
+<br/>step.5 so we can say that 沒有超過20%的同學運動量達標,**校方不可說有超過20%的同學達標**
+
+###(2)
+####資料準備
+```{r}
+b<-data[data$s=="F",]
+str(b)
+str(b[b$t=="Y",])
+p_f=18/137
+c<-data[data$s=="M",]
+str(c)
+str(c[c$t=="Y",])
+p_m=13/68
+```
+####hypothesis test
+<br/>step.1 <br/>null hypothesis:男生運動量達標的比例沒有比女生高
+<br/>alternative hypothesis:男生運動量達標的比例比女生高
+<br/>$H_0$:p1-p2=0
+<br/>$H_a$:p1-p2 > 0
+<br/>p1-p2 means the difference proportion of 男女運動達標比例;p1為男生運動達標比例;p2為女生運動達標比例
+<br/>step.2 the sample is random selected and is big enough，so calculate the z-score which is 1.125
+```{r}
+p1=13/68;n1=68
+p2=18/137;n2=137
+phat=(n1*p1+n2*p2)/(n1+n2)
+z=(p1-p2-0)/sqrt(phat*(1-phat)*((1/n1)+(1/n2)))
+z
+```
+<br/>step.3 the p-value is 0.13
+```{r}
+pnorm(z, lower.tail = FALSE)
+```
+```{r}
+prop.test(x = c(13,18), n = c(68,137), 
+          alternative = "greater", 
+          conf.level = 0.95, correct = F)
+```
+
+<br/>step.4 the p-value is larger than 0.05,so it is not statically significant evidence to conclude null hypothesis is wrong，we cannot reject the null value
+
+<br/>step.5 so we can say that 男生運動量達標的比例沒有比女生高,**此調查結果無法支持校方宣稱**
+
+
+
+

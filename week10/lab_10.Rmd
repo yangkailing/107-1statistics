@@ -1,0 +1,233 @@
+---
+title: "homework_10"
+author: "b06208016楊鎧綾"
+date: "November 16, 2018"
+output: html_document
+---
+##12.14
+###a
+<br/>**null hypothesis**:people in a certain region **are descended from** the same ancestors as the region she studied,which has 15% of the population has certain unique genetric trait &#160; &nbsp;there are 15% of the population has certain unique genetric trait
+<br/>**alternative hypothesis**:the people in a certain region **are not descended from** the same ancestors as the region she studied,which has 15% of the population has certain unique genetric trait &#160; &nbsp;there are not 15% of the population has certain unique genetric trait
+<br/>$H_0$:p=0.15
+<br/>$H_a$:p $\neq$ 0.15
+<br/>p means how many percent of people has certain unique genetric trait
+
+###b
+<br/>**null hypothesis**:there are 30% or more of the candies in the bag is red
+<br/>**alternative hypothesis**:there are less than 30% of the candies in the bag is red,which means candies are randomly placed into bags
+<br/>$H_0$:p=0.3
+<br/>$H_a$:p < 0.3
+<br/>p means how many percent of red candy is there in the bag
+
+##12.28
+###a
+<br/>**null hypothesis**:the physician cannot predict right at most of the time
+<br/>**alternative hypothesis**:the physican can have a right prediction at most of the time
+<br/>$H_0$:p=0.5
+<br/>$H_a$:p > 0.5
+<br/>p means the percentage the physican will predict right
+
+###b
+```{r}
+phat=0.6
+z=(phat-0.5)/sqrt(0.5*0.5/10)
+z
+pnorm(z,lower.tail = F)
+```
+<br/>step.1為a小題<br/>step.2假設他為random sample但np和n(1-p)<10,所以其實不符合條件，不過以phat=6/10(因為醫生在10個裡面成功預測6個)來找出z-score=0.63，<br/>step.3並根據z-score來找出p-value=0.26<br/>但與c小題所述的p-value不同
+
+###c
+<br/> step.4 p- value,which is 0.377 is too big to be smaller than 95% confidence level, which $\alpha=0.05$,so it is difficult to reject null hypothesis <br/>step.5that means the physician cannot predict right at most of the time
+
+###d
+$\alpha=0.05$ but the p-value is 0.377, which is bigger than $\alpha$ ,so we cannot reject the null hypothesis that means the physician cannot predict right at most of the time
+
+###e
+**increase the sample size**, the increase of sample size will reduce the standard deviation, then increase z-score and decrease p-value, which will increase the probability to reject null hypothesis by not increasing type 1 error
+
+
+##12.36
+<br/> type 1 error means  null hypothesis is right but is rejected
+<br/> type 2 error means  null hypothesis is false but is  not rejected
+
+####a.type 1 error
+
+####b.type 2 error
+
+####c.type 2 error
+
+####d.type 1 error
+
+##12.54
+###METHOD1
+```{r}
+prop.test(x = 103, n = 215, 
+          p = 0.5, alternative = "two.sided", 
+          conf.level = 0.95, correct = F)
+z_score11 = sqrt(0.37674)
+z_score11
+
+```
+<br/>根據上述程式碼，p-value為0.5394，大於0.05的alpha值，因此我們無法否定$H_0$，也就是說大部分的人左腳右腳還是一樣長<br/>
+
+###METHOD2
+```{r}
+z_half_alpha = qnorm(0.05, lower.tail = F)
+
+p_hat = 103 / 215
+z_score = (p_hat-0.5) / sqrt(0.5*0.5/215)
+z_score
+
+#From z-score
+if (abs(z_score) >= abs(z_half_alpha)) {
+  CHECK = "Reject NULL"
+} else {
+  CHECK = "Can NOT reject NULL"
+}
+
+#From p-value and alpha
+p.value = pnorm(z_score)*2
+p.value
+
+print(CHECK)
+```
+
+<br/>step.1$H_0$為p=0.5，也就是左腳右腳一樣長的比率為0.5，為null hypothesis；<br/>$H_a$為p不等於0.5，也就是左腳右腳不一樣長，為alternative hypothesis<br/>step.2 然後題目假設他為具代表性的樣本而且215/2>10,所以符合條件，可以繼續做假說檢定<br/>以phat=103/215來找出z-score=-0.61，<br/>step.3並根據z-score來找出p-value=0.54，<br/>step.4 發現他大於alpha=0.05，所以此次抽樣並**不能否認null hypothesis**，<br/>step.5也就是說大部分的人左腳右腳還是一樣長<br/>
+
+##12.70
+###a
+```{r}
+prop.test(x = c(0.51*493, 0.38*538), n = c(493,538), 
+          alternative = "greater", 
+          conf.level = 0.95, correct = F)
+phat=(0.51*493+0.38*538)/(493+538)
+z=(0.51-0.38-0)/sqrt(phat*(1-phat)*(1/493+1/538))
+z
+pnorm(z,lower.tail = F)
+
+```
+<br/>the p-value is 0.0000134404,which is smaller than 0.05,so it is statically significant evidence to conclude that **null hypothesis is wrong**, <br/>so we can say that man is more likely to say "the primary cause is the way parents raise kids" than woman
+
+###b
+<br/>**no it can not use the approach in section 12.3**, because the two sample are not independent<br/>the HT Module2 need to meet some conditions:<br/>1.two samples are independent and random selected<br/>2.the sample is big enough
+
+
+<br/>step.1**null hypothesis**:man and woman are the same
+<br/>**alternative hypothesis**:higher proportion of man than woman thought parents is the primary cause
+<br/>$H_0$:p1-p2=0
+<br/>$H_a$:p1-p2 > 0
+<br/>p1-p2 means the difference of proportion of man and woman
+
+<br/>step.2 the sample is random selected and is big enough，the z-score is 4.1984
+
+
+<br/>step.3 the p-value is 0.0000134404
+
+<br/>step.4 the p-value is smaller than 0.05,so it is statically significant evidence to conclude that **null hypothesis is wrong**，we can reject the null value
+
+
+ <br/>step.5 so we can say that man is more likely to say "the primary cause is the way parents raise kids" than woman
+
+##12.84
+###a
+```{r}
+phat=0.25
+z=(phat-0.2)/sqrt(0.2*0.8/400)
+z
+```
+<br/>**the z-score is 2.5**
+
+###b
+```{r}
+pnorm(z,lower.tail = F)
+```
+<br/>**the p-value is 0.0062**
+
+###c
+<br/>assuming that under confidence level of 95% the $\alpha=0.05$,the p-value is smaller than  $\alpha$ ,there is statically significant to reject the null hypothesis, so we can say that population proportion is higher than 0.2
+
+###d
+```{r}
+phat=0.25
+z=(phat-0.2)/sqrt(0.2*0.8/100)
+pnorm(z,lower.tail = F)
+```
+<br/>**the z-score is 1.25;the p-value is 0.1056498**,assuming that under confidence level of 95% the $\alpha=0.05$,the p-value is larger than  $\alpha$ ,there is not statically significant to reject the null hypothesis, so we can say that population proportion is higher than 0.2
+
+###e
+<br/>the increase of sample size will reduce the standard deviation, then increase z-score and decrease p-value, which will increase the probability to reject null hypothesis by not increasing type 1 error
+
+
+##R studio
+```{r}
+load("UCBAdmissions.Rdata")
+
+#建立需要用到的vector
+Z_scores=c()
+CHECK_z=c()
+CHECK_p=c()
+
+#計算alpha的z-score
+alpha=0.01
+z_half_alpha = qnorm(0.005, lower.tail = F)
+
+#分department 做hypothesis test
+department=c("A","B","C","D","E","F")
+for (i in department){
+  B<-A[A$Dept== i, ]
+  x2 = xtabs(Freq ~ Gender + Admit, data = B)
+  x_Male = x2[1,1]
+  x_Female = x2[2,1]
+  
+  Total_Male = sum(x2[1,])
+  Total_Female = sum(x2[2,])
+  
+  Male_Rate = x_Male / Total_Male
+  Female_Rate = x_Female / Total_Female
+  
+  #common population proportion
+  Total_Rate = (x2[1,1]+x2[2,1]) / sum(x2)
+  
+  se2 = sqrt(Total_Rate * (1-Total_Rate) * (1/Total_Male+1/Total_Female))
+  z2_score = ((Male_Rate - Female_Rate) - 0) / se2
+  Z_scores[i]=z2_score
+  
+  #From z-score
+  if (abs(Z_scores[i]) >= abs(z_half_alpha)) {
+    CHECK_z[i] = "Reject NULL"
+  } else {
+    CHECK_z[i] = "Can NOT reject NULL"
+  }
+  #From p-value and alpha
+  p.value = pnorm(abs(Z_scores[i]),lower.tail = F)*2
+  
+  if(p.value<=alpha){
+    CHECK_p[i] = "Reject NULL"
+  }else {
+    CHECK_p[i] = "Can NOT reject NULL"
+  }
+}
+
+
+outcome<-list("zscores"=Z_scores,"CHECK from z-score"=CHECK_z, "CHECK from p-value"=CHECK_p)
+outcome
+
+```
+
+<br/>根據程式結果，只有A department 可以reject null hypothesis,也就是說A department男女錄取率是有差別的；其他科系並不能否定虛無假說
+
+<br/>step1.**null hypothesis**:there are no discrimation
+<br/>**alternative hypothesis**:man is more likely to be accepted
+<br/>$H_0$:p1-p2=0
+<br/>$H_a$:p1-p2 > 0
+<br/>p1-p2 means the difference of man and woman
+
+<br/>step.2 the sample is random selected and is big enough，the z-score is (-4.15,-0.50,0.868,-0.546,1.00,-0.619)
+
+
+<br/>step.3 find the p-value 
+
+<br/>step.4 check whether the p-value is smaller than 0.01, only department is smaller than 0.01
+
+
+ <br/>step.5 so we can say that only department A has discrimation

@@ -1,0 +1,166 @@
+---
+title: "lab_11"
+author: "b06208016楊鎧綾"
+date: "November 23, 2018"
+output: html_document
+---
+
+##13.24
+###a
+<br/>step.1 null hypothesis:the pulse rate of men is 72
+<br/>alternative hypothesis:the pulse rate of men is not 72
+<br/>$H_0:\mu=72$
+<br/>$H_a:\mu \neq 72$
+<br/>$\mu$ means the pulse rate of men
+```{r}
+t_score=(70.42-72)/(9.95/sqrt(57))
+```
+<br/>step.2 the sample size is big enough to continue hypothesis test, the t-score=-1.199
+```{r}
+2*pt(t_score,df=56)
+```
+
+<br/>step.3 the p-value=0.236
+<br/>step.4 set alpha=0.05,the p-value is bigger than alpha, so we can not reject null hypothesis
+<br/>step.5 we can say that the pulse rate of men is 72 is not wrong
+
+###b
+<br/>step.1 null hypothesis:the pulse rate of women is 72
+<br/>alternative hypothesis:the pulse rate of women is not 72
+<br/>$H_0:\mu=72$
+<br/>$H_a:\mu \neq 72$
+<br/>$\mu$ means the pulse rate of women
+```{r}
+t_score=(76.9-72)/(11.6/sqrt(35))
+```
+<br/>step.2 the sample size is big enough to continue hypothesis test, the t-score=2.499
+```{r}
+2*pt(t_score,df=34,lower.tail = F)
+```
+<br/>step.3 the p-value=0.017
+<br/>step.4 set alpha=0.05,the p-value is smaller than alpha, so we can reject null hypothesis
+<br/>step.5 we can say that the pulse rate of women is not 72 
+
+###c
+under $\alpha=0.05$<br/>the result of (a) means that the mean of pulse of men is almost 72<br/>the result of (b) means that the mean of pulse of women is not 72
+
+##13.38
+###a
+```{r}
+bean_d=c(4,4,5,1,-2,0,2,4,-3,0,0,0,-2,2,1)
+```
+<br/>null hypothesis:two hands are the same 
+<br/>alternative hypothesis:dominant hand has better manual dexterity than nondominant hand
+<br/>$H_0:\mu_d=0$
+<br/>$H_a:\mu_d>0$
+<br/>$\mu_d$ means the difference of beans of dominant hand and nondominant hand place
+
+###b
+```{r}
+boxplot(bean_d)
+stripchart(bean_d, method = "stack", offset = .7, at = .3, pch = 19)
+```
+<br/>as the boxplot shows the data has no outliers and no extreme skewed, so we can continue hypothesis test
+
+###c
+```{r}
+t.test(bean_d,alternative="greater",paired = F,var.equal = F,conf.level = 0.95)
+```
+<br/>the p-value is 0.05587 which is larger than $\alpha=0.05$ ,so we cannot reject the null hypothesis test, we can say that two hands are the same 
+
+###d
+```{r}
+t.test(bean_d,alternative="greater",paired = F,var.equal = F,conf.level = 0.9)
+```
+<br/>the p-value is 0.05587 which is less than $\alpha=0.1$ ,so we can reject the null hypothesis test, we can say that dominant hand has better manual dexterity than nondominant hand
+
+###e
+<br/>假設我們要證明的是慣用手比較靈敏，因為證明一件事是對的往往比反對困難，所以我們要做的是證明兩隻手是一樣的是錯的，<br/>而我們根據這個假說去抽樣，看抽樣的平均值的落點來算出如果我們說虛無假設是錯的，但事實上他是對的的機率是多少，<br/>如果比我們所設定的最大誤差值小，那我們就可以否定虛無假設，而說對立假設是對的，<br/>也就是說c小題覺得兩隻手無差別，而d小題慣用手比非慣用手好，<br/>他們的差別是在我們可以接受型一誤差的程度
+
+##13.58
+###a
+<br/>step.1null hypothesis:the two population of students are equal
+<br/>alternative hypothesis:the two population of students are not equal
+<br/>$H_0$:p1-p2=0
+<br/>$H_a$:p1-p2 $\neq$ 0
+<br/>p1-p2 means the difference of proportion of two samples
+```{r}
+t_score=(7.66-6.81-0)/sqrt(((1.34^2)/25)+((1.73^2)/148))
+```
+
+<br/>step.2 the sample is random selected and is big enough or normal distribution，the t-score is 2.80
+```{r}
+2*pt(t_score, df =38, lower.tail = FALSE)
+```
+<br/>step.3 the p-value is 0.00795
+<br/>step.4 the p-value is smaller than 0.05(we set the significent leve($\alpha$) as 0.05),so it is statically significant evidence to conclude that **null hypothesis is wrong**，we can reject the null value
+ <br/>step.5 so we can say that the mean number of hours of sleep for the two populations of students are not equal
+
+###b
+the two conditions are:<br/>1.approximately normal(no outlier or extreme skewed)<br/>2.large random sample(large than 30)<br/>the data need to meet at least one condition<br/>non-liberal arts is 148 which is large enough but it has outlier<br/>liberal arts has small sample size but it is approximately normal<br/>the unpooled test degree of freedom is 38 which is big enough, so we can use hypothesis test
+
+###c
+<br/>step.1null hypothesis:the two population of students are equal
+<br/>alternative hypothesis:the two population of students are not equal
+<br/>$H_0$:p1-p2=0
+<br/>$H_a$:p1-p2 $\neq$ 0
+<br/>p1-p2 means the difference of proportion of two samples
+```{r}
+sp=sqrt((24*(1.34^2)+147*(1.73^2))/(25+148-2))
+t_score=(7.66-6.81-0)/(sp*sqrt((1/25)+(1/148)))
+t_score
+```
+
+<br/>step.2 the sample is random selected and is big enough or normal distribution，the t-score is 2.34
+```{r}
+2*pt(t_score, df =25+148-2, lower.tail = FALSE)
+```
+<br/>step.3 the p-value is 0.02
+<br/>step.4 the p-value is smaller than 0.05(we set the significent leve($\alpha$) as 0.05),so it is statically significant evidence to conclude that **null hypothesis is wrong**，we can reject the null value
+ <br/>step.5 so we can say that the mean number of hours of sleep for the two populations of students are not equal 
+ 
+ <br/>the unpooled one is better all the time<br/>but as the text book say, if the large sample has large standard error, it is better to use pooled test
+ 
+##13.64
+
+###a
+**tne null hypothesis can be rejected** ,because the $\mu$ is not in the confidence level, so can reject the $H_0:\mu=25$
+
+###b
+**tne null hypothesis cannot be rejected** ,because the $\mu$ is in the confidence level, so we canotn reject the $H_0:\mu=25$
+
+###c
+**tne null hypothesis cannot be rejected** , even though the $\mu$ is in the confidence level, but the $H_a:\mu<25$ ,the confidence interval is (26 to 30) which is above $\mu$ not less than $\mu$,  so we canotn reject the $H_0:\mu=25$
+
+##13.76
+
+###a
+<br/>**hypothesis test,categorical,one proportion**
+<br/>null hypothesis:the probability of borning in October is no difference to other months
+<br/>alternative hypothesis:people more likely to born in October
+<br/>$H_0$:p=31/365;$H_a$:p > 31/365
+<br/>p means the probability of borning in October
+<br/>because Max hypothesis something so it is a hypothesis test
+<br/>出生月份是類別資料而不是連續資料，而且他只有假設一個比例，所以是one proportion
+<br/>phat=22/170
+
+###b
+<br/>**confidence interval,numerical,paired data**
+<br/>因為它是實際抽樣28位病人，得到xbar及standard deviation，目的是推估出信賴區間，所以是confidence level
+<br/>n=28,mu_d=23.29,standard error of mu_d is 38.28,so we can calculate t-score and do confidence interval
+<br/>cholest 指數是連續資料，而且他是從同一個病人取不同天的cholesterol level，比較兩次取樣的差別，關心的是差別本身而不是母體，所以是paired data
+
+##13.78
+###a
+$dhat=t/sqrt(n)$
+```{r}
+1.48/sqrt(30)
+```
+dhat的值比較接近0.2，所以她的effect size magnitude 是small
+
+###b
+$dhat=t*sqrt(1/n1+1/n2)$
+```{r}
+abs(-2.33*sqrt(1/40+1/50))
+```
+dhat的值比較接近0.5，所以她的effect size magnitude 是medium

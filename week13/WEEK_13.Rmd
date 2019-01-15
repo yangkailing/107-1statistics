@@ -1,0 +1,181 @@
+---
+title: "week_13"
+author: "b06208016楊鎧綾"
+date: "December 7, 2018"
+output: html_document
+---
+##3.12
+###a
+<br/>**the response variable(y) is height;and the explanatory variable(x) is mid-parent height**
+
+###b
+```{r}
+height_m=c(71,70,74,67,65,72,68,74)
+height_f=c(60,66,65,66,67,63,69,63,61,65)
+parheight_m=c(64,64.5,72.5,64,63,69,67,69.5)
+parheight_f=c(63.5,67,65.5,69.5,67.5,65.5,70,63,63,67.5)
+```
+```{r}
+plot(x=c(64,74),type="n",xlim=c(64,74),main="parent_height vs height",ylab="height",xlab="parentheight")
+points(parheight_m,height_m,pch=16,col="blue")
+points(parheight_f,height_f,pch=16,col='red')
+legend("bottomright",c("male","female"),col=c("blue","red"),pch=c(16,16))
+
+```
+
+###c
+<br/>as the plot shows it **might be linear**,<br/>and it is positive direction,<br/>it's variation is big, because it is vary from average pattern,<br/>it **do not have outliers**,<br/>the difference of male and female is that **female is almost shorter than male even though their parents' height is the same**, but both of male and female have linear positive pattern
+
+###d
+```{r}
+male_d=height_m-parheight_m
+female_d=height_f-parheight_f
+```
+```{r}
+plot(x=c(-4,7),type="n",xlim=c(64,74),main="parent_heigh vs height_differencet",ylab="height_difference",xlab="parentheight")
+points(parheight_m,male_d,pch=16,col="blue")
+points(parheight_f,female_d,pch=16,col='red')
+legend("bottomright",c("male","female"),col=c("blue","red"),pch=c(16,16))
+```
+<br/>the graph reveal that **male often taller than parents and female often shorter than parents**,<br/>even though male and female have the same parent height, they could have different height_difference which female are almost negative and male positive,<br/> **so the gender of people might be another factor to effect height, it might be a subgroup **
+
+##3.24
+###a
+<br/>**the slope of line is -2.34, which means as latitudes increase one, the January temperatures will  estimate to decrease 2.34**
+
+###b
+```{r}
+yhat_d=(126-2.34*40)-(126-2.34*42);yhat_d
+y_d=25-29;y_d
+```
+<br/>**the predicted difference by equation is 4.68, which means Pittsburgh is hotter than Boston.<br/>but the actual difference is -4, which means Pittsburgh is cooler than Boston.**
+
+###c
+```{r}
+126-2.34*33
+```
+<br/>the predicted average January temperature for a city with latitude 33 is **48.78**
+
+###d
+<br/>there are two cities in the table have the latitude 33, Phoenix and Dallas, with there actual average January temperature is 43 and 54, respectively.
+<br/>Phoenix's residual is  $43-48.78=-5.78$ which means it is overestimate, the actual temperature is lower than predict, **the city is cooler than predict**
+<br/>Phoenix's residual is  $54-48.78=5.22$ which means it is underestimate, the actual temperature is higher than predict, **the city is warmer than predict**
+
+##3.48
+###a
+<br/> because SSTO(sum of squared total) means the sum of squared differences between observed y values and the sample mean ybar,<br/> which **only depends on y** and has no relationships with x <br/>so  no matter what explantory variables is, the SSTO is the same
+
+###b
+<br/>**the mid-parent height explains the most variablity in students' height** <br/> because the SSR of it is 122.4, which is bigger than other two
+
+###c
+```{r}
+88/284
+```
+**the $r^2$ is 0.3099**,which is the ratio of $SSR/SSTO$ ，describe the strength of a linear relationship,the value means the explantory variable explains 30.9% of the variation among the observation of response variable
+
+##3.62
+###a
+```{r}
+113.6-1.01*0
+```
+<br/>the estimated August temperature is **113.6** at the latitude 0
+
+###b
+<br/>**because it is extrapolating**, all the data is between latitude 26~47, so  it is not good to use it to estimate latitude out of this range, it has a high probability to be false
+
+##3.82
+###a
+<br/>the slope is -0.1184, so the correlation between winning time and year is **negative**,which means adding one year the winning time will decrease, also can say that if want to win in closed year you need to run faster
+
+###b
+```{r}
+272.63-0.1184*2010
+```
+<br/>the predicted winning time is 34.646, the actual time is 34.91, so the residual is 0.264, <br/>which means **predicteded and actual is almost closely, but the prediction is a little be underestimate**, the actual winning time is longer than predicted one
+
+###c
+```{r}
+4*-0.1184
+```
+<br/>as the Olympic game occur every 4 years, we mulitiply -0.1184 by 4, which means **adding one time of Olympic game, the winning time would decrease 0.4736 second**
+
+###d
+<br/>**because it is extrapolating**, all the data is between 1924~2006, so  it is not good to use it to estimate 2080 winter Olympic, it has a high probability to be false
+
+##r practice
+```{r}
+veh=read.csv("Vehicles.csv",sep=",",header=T)
+head(veh)
+```
+###scatterplot
+```{r}
+vehicle=veh$Vehicle
+GDP=veh$GDP
+plot(vehicle~GDP,pch=16,cex=1,col="navy",main="GDP vs Vehicle number",xlab="GDP",ylab="Vehicle number")
+```
+<br/>the plot is linear, positive, have low variance, and no have outlier 
+
+###correlation coefficient 相關係數
+```{r}
+cor.test(GDP,vehicle)
+```
+<br/>the correlation coefficient is 0.98683, which is very strong positive linear association
+
+###simple linear regression
+```{r}
+RESULTS=lm(vehicle~GDP)
+summary(RESULTS)     
+```
+
+####coefficient
+```{r}
+RESULTS$coefficients
+```
+<br/>the 迴歸係數 is 305.5035, which means as GDP increase 10億元 the sale of vehicle increase 305.5035<br/>and the intercept is 1605510.5<br/>so the equation is saling car numbers =1605510.5+305.5*GDP
+
+####residual
+```{r}
+head(RESULTS$residuals)
+mean(abs(RESULTS$residuals))
+```
+<br/>the mean of absolute residuals is 135145.5, which means the difference of actual and estimated value
+
+####estimated y (yhat)
+```{r}
+head(RESULTS$fitted.values)
+```
+<br/>this is the estimate value of saling vehicle number
+
+####plot
+```{r}
+
+plot(vehicle~GDP,pch=16,cex=1,col="navy",main="GDP vs Vehicle number",xlab="GDP",ylab="Vehicle number")
+
+abline(RESULTS,col="red")
+```
+<br/>the plot is linear, positive, have low variance, and no have outlier, and the dots is close to the regression line
+
+####anova
+####看SSR跟SSE
+```{r}
+anova(RESULTS)
+```
+<br/>the SSR is 2.7609e+13, the SSE is 7.4185e+11, so the r-square is 0.9738, which is really high, it means that GDP can explain 97.38% of the increase or decrease of the saling of vehicle 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
